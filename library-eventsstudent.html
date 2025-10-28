@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Library Events | Student View</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+  <style>
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      font-family: 'Segoe UI', 'Poppins', Arial, sans-serif;
+      color: #222;
+      margin: 0;
+    }
+    .main-header {
+      background: linear-gradient(90deg, #36d1c4 0%, #5b86e5 100%);
+      color: #fff;
+      padding: 2rem 0 1rem 0;
+      border-bottom-left-radius: 32px;
+      border-bottom-right-radius: 32px;
+      box-shadow: 0 8px 32px rgba(91, 134, 229, 0.15);
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .main-header h2 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 0.5rem;
+    }
+    .main-header p {
+      font-size: 1.1rem;
+      opacity: 0.92;
+      margin-bottom: 0;
+    }
+    .events-section {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+      background: rgba(255,255,255,0.85);
+      border-radius: 24px;
+      box-shadow: 0 8px 32px rgba(91, 134, 229, 0.10);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(91, 134, 229, 0.10);
+      margin-bottom: 2rem;
+    }
+    .events-section h3 {
+      font-weight: 700;
+      color: #36d1c4;
+      margin-bottom: 1.2rem;
+      letter-spacing: 0.5px;
+      text-align: center;
+    }
+    #eventsList .card {
+      border-radius: 18px;
+      border: none;
+      box-shadow: 0 4px 16px rgba(91, 134, 229, 0.08);
+      background: rgba(255,255,255,0.96);
+      margin-bottom: 1.5rem;
+      transition: box-shadow 0.2s;
+    }
+    #eventsList .card:hover {
+      box-shadow: 0 8px 32px rgba(91, 134, 229, 0.15);
+      background: #f6f9ff;
+    }
+    #eventsList .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #36d1c4;
+    }
+    #eventsList .card-subtitle {
+      font-size: 1rem;
+      color: #5b86e5;
+      margin-bottom: 0.7rem;
+    }
+    #eventsList .card-text {
+      font-size: 1.05rem;
+      color: #333;
+    }
+    #eventsList small.text-muted {
+      color: #6c757d !important;
+    }
+    @media (max-width: 600px) {
+      .main-header h2 {
+        font-size: 1.3rem;
+      }
+      .main-header p {
+        font-size: 1rem;
+      }
+      .events-section {
+        padding: 1rem 0.3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="main-header">
+    <h2><i class="fas fa-calendar-alt me-2"></i>Upcoming Library Events</h2>
+    <p>Stay updated with the latest happenings at your library!</p>
+  </div>
+  <div class="events-section">
+    <h3><i class="fas fa-bullhorn me-2"></i>Events List</h3>
+    <div class="mb-3 d-flex flex-wrap gap-2">
+      <button class="btn btn-outline-success btn-sm" id="filter-upcoming" type="button">Upcoming</button>
+      <button class="btn btn-outline-secondary btn-sm" id="filter-past" type="button">Past</button>
+      <input type="text" class="form-control form-control-sm ms-auto" style="max-width:220px;" id="search-events" placeholder="Search events...">
+    </div>
+    <div id="eventsList"></div>
+  </div>
+  <script>
+    let allEvents = [];
+    let searchQuery = "";
+
+    function sortEventsByDate(events) {
+      return events.slice().sort((a, b) => {
+        // Parse dates, fallback to 0 if invalid
+        const dateA = a.event_date ? new Date(a.event_date) : new Date(0);
+        const dateB = b.event_date ? new Date(b.event_date) : new Date(0);
+        return dateA - dateB;
+      });
+    }
+
+    function renderEvents(events) {
+      const container = document.getElementById('eventsList');
+      // Filter by search query if present
+      let filteredEvents = events;
+      if (searchQuery.trim()) {
+        const q = searchQuery.trim().toLowerCase();
+        filteredEvents = events.filter(ev =>
+          (ev.title && ev.title.toLowerCase().includes(q)) ||
+          (ev.description && ev.description.toLowerCase().includes(q)) ||
+          (ev.category && ev.category.toLowerCase().includes(q)) ||
+          (ev.location && ev.location.toLowerCase().includes(q))
+        );
+      }
+      // Sort by date ascending
+      filteredEvents = sortEventsByDate(filteredEvents);
+
+      if (!Array.isArray(filteredEvents) || !filteredEvents.length) {
+        container.innerHTML = '<div class="alert alert-info">No events found.</div>';
+        return;
+      }
+      container.innerHTML = filteredEvents.map(ev => `
+        <div class="card mb-3 p-2" style="border-left: 6px solid #36d1c4;">
+          <div class="row g-0 align-items-center">
+            <div class="col-12 col-md-3 text-center mb-2 mb-md-0">
+              <div class="d-flex flex-column align-items-center justify-content-center h-100">
+                <div class="fw-bold text-primary" style="font-size:1.7rem;">
+                  <i class="far fa-calendar-alt me-2"></i>${ev.event_date}
+                </div>
+                ${ev.event_time ? `<div class="text-secondary mt-1"><i class="far fa-clock me-1"></i>${ev.event_time}</div>` : ''}
+              </div>
+            </div>
+            <div class="col-12 col-md-9">
+              <div class="card-body py-2 px-3">
+                <div class="d-flex align-items-center mb-2">
+                  <h5 class="card-title mb-0 flex-grow-1"><i class="fas fa-book-open me-2"></i>${ev.title}</h5>
+                  <span class="badge bg-info text-dark ms-2"><i class="fas fa-tag me-1"></i>${ev.category}</span>
+                </div>
+                <p class="card-text mb-1">${ev.description}</p>
+                <div class="d-flex align-items-center mt-2">
+                  <span class="text-muted"><i class="fas fa-map-marker-alt me-1"></i>${ev.location}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function fetchAndShowEvents() {
+      fetch('http://127.0.0.1:5000/events')
+        .then(res => res.json())
+        .then(events => {
+          allEvents = events;
+          renderEvents(events);
+        })
+        .catch((err) => {
+          console.error("Error fetching events:", err);
+          document.getElementById('eventsList').innerHTML = '<div class="alert alert-danger">Failed to load events.</div>';
+        });
+    }
+
+    // Filtering logic
+    function filterEvents(type) {
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      let filtered = [];
+      if (type === 'upcoming') {
+        filtered = allEvents.filter(ev => {
+          if (!ev.event_date) return false;
+          const evDate = new Date(ev.event_date);
+          evDate.setHours(0,0,0,0);
+          return evDate >= today;
+        });
+      } else if (type === 'past') {
+        filtered = allEvents.filter(ev => {
+          if (!ev.event_date) return false;
+          const evDate = new Date(ev.event_date);
+          evDate.setHours(0,0,0,0);
+          return evDate < today;
+        });
+      } else {
+        filtered = allEvents;
+      }
+      renderEvents(filtered);
+    }
+
+    document.getElementById('filter-upcoming').onclick = () => filterEvents('upcoming');
+    document.getElementById('filter-past').onclick = () => filterEvents('past');
+    document.getElementById('search-events').addEventListener('input', function() {
+      searchQuery = this.value;
+      renderEvents(allEvents);
+    });
+
+    // Load events on page load
+    fetchAndShowEvents();
+  </script>
+</body>
+</html>

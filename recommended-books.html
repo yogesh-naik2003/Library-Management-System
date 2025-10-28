@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recommended Books | Library System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- SweetAlert2 CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background: linear-gradient(to right, #f0f8ff, #e6e6fa); /* New gradient background */
+    }
+    main {
+      flex: 1;
+    }
+    /* Header Styles */
+    .navbar {
+      background: linear-gradient(to right, #4e9bbc, #8760c5); /* New gradient color */
+      padding: 15px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .navbar-brand {
+      color: white;
+      font-weight: bold;
+      font-size: 24px;
+      text-transform: uppercase;
+    }
+    .navbar-nav .nav-link {
+      color: white;
+      font-weight: 500;
+      margin-right: 15px;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+    .navbar-nav .nav-link:hover {
+      color: #ffcc80; /* Hover color */
+      transform: scale(1.1); /* Hover effect */
+    }
+    .navbar-toggler {
+      border: none;
+    }
+    .navbar-toggler-icon {
+      background-color: white;
+    }
+    /* Search Bar */
+    .search-bar {
+      margin: 20px auto;
+      max-width: 600px;
+      display: flex;
+      align-items: center;
+      border: 2px solid #9b7f3f;
+      border-radius: 30px;
+      overflow: hidden;
+    }
+    .search-bar input {
+      flex: 1;
+      border: none;
+      padding: 10px 15px;
+      font-size: 16px;
+      outline: none;
+    }
+    .search-bar button {
+      background: #b7af21;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+    .search-bar button:hover {
+      background: #f7fbfb; /* Hover color */
+      transform: scale(1.1); /* Hover effect */
+    }
+    /* Book Card Styles */
+    .book-card {
+      background: rgb(244, 244, 241);
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .book-card:hover {
+      transform: translateY(-10px) scale(1.05); /* Lift and scale effect */
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      background-color: #f9f9f9; /* Slight background color change */
+    }
+
+    .book-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(255, 204, 128, 0.3), rgba(70, 128, 141, 0.3));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 0;
+    }
+
+    .book-card:hover::before {
+      opacity: 1; /* Add gradient overlay on hover */
+    }
+
+    .book-card p {
+      position: relative;
+      z-index: 1; /* Ensure text is above the gradient overlay */
+      margin: 10px 0;
+    }
+
+    .book-card p strong {
+      color: #4e9bbc; /* Highlighted label color */
+    }
+    /* Neon Button Styles */
+    .neon-button {
+      display: inline-block;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #eb450e;
+      background: #83a5ab;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-transform: uppercase;
+      box-shadow: 0 0 5px #95bc4e, 0 0 10px #4e9bbc, 0 0 20px #4e9bbc, 0 0 40px #4e9bbc;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .neon-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 10px #4e9bbc, 0 0 20px #4e9bbc, 0 0 30px #4e9bbc, 0 0 50px #4e9bbc;
+    }
+    /* Borrow Button Styles */
+    .borrow-button {
+      display: inline-block;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      color: white;
+      background: linear-gradient(45deg, #6a11cb, #2575fc); /* Gradient background */
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .borrow-button:hover {
+      background: linear-gradient(45deg, #2575fc, #6a11cb); /* Reverse gradient on hover */
+      transform: translateY(-3px) scale(1.05); /* Slight lift and scale effect */
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+    }
+    /* Add Button Styles */
+    .add-button {
+      display: inline-block;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      color: white;
+      background: linear-gradient(45deg, #28a745, #218838); /* Green gradient */
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-top: 10px;
+    }
+
+    .add-button:hover {
+      background: linear-gradient(45deg, #218838, #28a745); /* Reverse gradient on hover */
+      transform: translateY(-3px) scale(1.05); /* Slight lift and scale effect */
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+    }
+    /* Footer Styles */
+    footer {
+      background: linear-gradient(to right, #58b7df, #7e52cf); /* Gradient color */
+      color: white;
+      padding: 10px 0; /* Reduced padding */
+      font-size: 12px; /* Smaller font size */
+    }
+    footer .footer-links a {
+      font-size: 12px; /* Smaller link font size */
+      color: #ffcc80;
+      text-decoration: none;
+      margin: 0 5px; /* Reduced spacing between links */
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+    footer .footer-links a:hover {
+      color: white;
+      transform: scale(1.1);
+    }
+    footer .social-icons a {
+      font-size: 14px; /* Smaller icon size */
+      margin: 0 5px; /* Reduced spacing between icons */
+      color: #ffcc80;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+    footer .social-icons a:hover {
+      color: white;
+      transform: scale(1.2);
+    }
+  </style>
+</head>
+  <body>
+  <!-- Header -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+      <a class="navbar-brand" href="main.html">Library Management System</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="notifications.html">Notifications</a></li>
+          <li class="nav-item"><a class="nav-link" href="ebooks.html">E-Books</a></li>
+          <li class="nav-item"><a class="nav-link" href="library-eventsstudent.html">Events</a></li>
+          <li class="nav-item"><a class="nav-link" href="feedback.html">Feedback</a></li>
+          <li class="nav-item"><a class="nav-link" href="studentdashboard-main.html">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="student-dashboard.html">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main>
+    <div class="search-bar container">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search by ID, name, author, or category..."
+        oninput="searchBooks()" />
+    </div>
+
+    <div class="container mt-5">
+      <div id="booksContainer" class="row"></div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-primary text-white py-3 mt-auto">
+    <div class="container text-center">
+      <div class="footer-links mb-2">
+        <a href="aboutus.html" class="text-white text-decoration-none mx-2">About Us</a> | 
+        <a href="contact.html" class="text-white text-decoration-none mx-2">Contact</a> | 
+        <a href="privacy.html" class="text-white text-decoration-none mx-2">Privacy Policy</a>
+      </div>
+      <div class="social-icons mb-2">
+        <a href="#" class="text-white mx-2"><i class="bi bi-facebook"></i></a>
+        <a href="#" class="text-white mx-2"><i class="bi bi-twitter"></i></a>
+        <a href="#" class="text-white mx-2"><i class="bi bi-instagram"></i></a>
+        <a href="#" class="text-white mx-2"><i class="bi bi-linkedin"></i></a>
+      </div>
+      <p class="mb-0" style="font-size: 12px;">&copy; 2025 Library System. All Rights Reserved.</p>
+      <p class="mb-0" style="font-size: 12px; font-style: italic; color: #ffcc80;">
+        "A room without books is like a body without a soul." – Marcus Tullius Cicero
+      </p>
+    </div>
+  </footer>
+
+  <!-- SweetAlert2 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    let allBooks = []; // Store all books globally for filtering
+
+    // Fetch books from the backend and display them as cards
+    async function loadBooks() {
+      try {
+        const response = await fetch('http://localhost:5000/books'); // Backend API URL
+        allBooks = await response.json(); // Store all books globally
+        displayBooks(allBooks); // Display all books initially
+      } catch (error) {
+        console.error('Error fetching books:', error);
+      }
+    }
+
+    // Function to add a book to Pending Requests
+    function addBookToMyBooks(bookId) {
+      const selectedBook = allBooks.find(book => book.book_id === bookId);
+      if (selectedBook) {
+        let pendingRequests = JSON.parse(localStorage.getItem('pendingRequests')) || [];
+        let borrowedBooks = JSON.parse(localStorage.getItem('borrowedBooks')) || [];
+
+        // Check if the book is already borrowed
+        const isDuplicateBorrowed = borrowedBooks.some(book => book.book_id === bookId);
+        if (isDuplicateBorrowed) {
+          Swal.fire({
+            icon: 'info',
+            title: 'Already Borrowed',
+            text: `You have already borrowed the book "${selectedBook.book_name}".`,
+            confirmButtonColor: '#28a745',
+          });
+          return;
+        }
+
+        // Removed check for duplicate pending requests to allow request if not borrowed
+        // const isDuplicatePending = pendingRequests.some(book => book.book_id === bookId);
+        // if (isDuplicatePending) {
+        //   Swal.fire({
+        //     icon: 'info',
+        //     title: 'Already Requested',
+        //     text: `Book "${selectedBook.book_name}" is already in the approval queue.`,
+        //     confirmButtonColor: '#28a745',
+        //   });
+        //   return;
+        // }
+
+        // Add the book to pending requests
+        const bookToAdd = {...selectedBook, status: 'pending'};
+        pendingRequests.push(bookToAdd);
+        localStorage.setItem('pendingRequests', JSON.stringify(pendingRequests));
+
+        // Show a SweetAlert2 popup
+        Swal.fire({
+          icon: 'success',
+          title: 'Request Sent',
+          text: `Book "${selectedBook.book_name}" has been sent for approval.`,
+          confirmButtonColor: '#28a745',
+        });
+        // Removed automatic redirect to issue-returnbook.html to keep user on the same page
+        // .then(() => {
+        //   window.location.href = 'issue-returnbook.html';
+        // });
+      } else {
+        console.error(`Book with ID ${bookId} not found.`);
+      }
+    }
+
+    // Function to display books dynamically
+    function displayBooks(books) {
+      const booksContainer = document.getElementById('booksContainer');
+      booksContainer.innerHTML = ''; // Clear the container before adding new content
+
+      books.forEach(book => {
+        const bookCard = `
+          <div class="col-md-4">
+            <div class="book-card" style="background:#f4f4f1; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); padding:20px; margin-bottom:10px;">
+              <p><strong>Book ID:</strong> ${book.book_id}</p>
+              <p><strong>Book Name:</strong> ${book.book_name}</p>
+              <p><strong>Author:</strong> ${book.author}</p>
+              <p><strong>Category:</strong> ${book.category}</p>
+              <p><strong>Description:</strong> ${book.description}</p>
+            </div>
+            <button class="borrow-button" onclick="addBookToMyBooks('${book.book_id}')" style="padding:10px 20px; background:#28a745; color:#fff; border:none; border-radius:5px; cursor:pointer; margin-bottom:20px;">Borrow</button>
+          </div>
+        `;
+        booksContainer.innerHTML += bookCard;
+      });
+    }
+
+    // Function to handle search
+    function searchBooks() {
+      const searchInput = document.getElementById('searchInput').value.toLowerCase();
+      const filteredBooks = allBooks.filter(book =>
+        book.book_id.toLowerCase().includes(searchInput) ||
+        book.book_name.toLowerCase().includes(searchInput) ||
+        book.author.toLowerCase().includes(searchInput) ||
+        book.category.toLowerCase().includes(searchInput)
+      );
+
+      // Display searched books first, followed by the rest
+      const remainingBooks = allBooks.filter(book => !filteredBooks.includes(book));
+      displayBooks([...filteredBooks, ...remainingBooks]);
+    }
+
+    // Load books on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      loadBooks();
+
+      // Set interval to refresh books every 30 seconds
+      setInterval(() => {
+        loadBooks();
+      }, 30000);
+    });
+  </script>
+</body>
+</html>

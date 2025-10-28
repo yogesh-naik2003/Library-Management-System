@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Manage Library Books</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%), 
+        url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJPYUsJPc-YuZuMQVMab387b0HXKmDBwSNCw&s") no-repeat center center fixed;
+      background-size: cover;
+      background-blend-mode: lighten;
+    }
+    header {
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 36px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.13);
+      border-bottom-left-radius: 28px;
+      border-bottom-right-radius: 28px;
+    }
+    .header-left {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 8px #0072ff33;
+    }
+    .header-right a {
+      color: white;
+      margin-left: 28px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.08rem;
+      letter-spacing: 0.5px;
+      transition: color 0.3s;
+    }
+    .header-right a:hover {
+      color: #ffe066;
+      text-shadow: 0 0 8px #0072ff;
+    }
+    .container {
+      padding: 40px 16px 30px 16px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    h2 {
+      text-align: center;
+      color: #4e73df;
+      margin-bottom: 32px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 8px #4e73df22;
+    }
+    form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 22px;
+      justify-content: center;
+      margin-bottom: 48px;
+      background: linear-gradient(120deg, #f6f9ff 80%, #e0eafc 100%);
+      padding: 32px 18px 24px 18px;
+      border-radius: 22px;
+      box-shadow: 0px 10px 32px rgba(78,115,223,0.10);
+      border: 1.5px solid #e0eafc;
+      transition: all 0.3s ease;
+    }
+    form input, form select, form button, form textarea {
+      padding: 13px 18px;
+      border: 1.5px solid #90b644;
+      border-radius: 14px;
+      font-size: 1rem;
+      min-width: 240px;
+      transition: 0.3s;
+      background: #f8fafc;
+      box-shadow: 0 2px 8px #e0eafc33;
+    }
+    form input:focus, form select:focus, form button:focus, form textarea:focus {
+      border-color: #4e73df;
+      outline: none;
+      background: #e0eafc;
+    }
+    form button {
+      background: linear-gradient(90deg, #4e73df 0%, #224abe 100%);
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 2px 8px #4e73df33;
+      min-width: 120px;
+      font-size: 1.08rem;
+    }
+    form button:hover {
+      background: linear-gradient(90deg, #224abe 0%, #4e73df 100%);
+      color: #ffe066;
+      transform: translateY(-2px) scale(1.04);
+    }
+    form input, form select, form button {
+      margin-bottom: 12px;
+    }
+    form textarea {
+      resize: vertical;
+      height: 110px;
+    }
+    table {
+      width: 100%;
+      margin-top: 30px;
+      border-collapse: separate;
+      border-spacing: 0 10px;
+      background: transparent;
+    }
+    th, td {
+      padding: 16px 12px;
+      text-align: center;
+      border-bottom: none;
+      font-size: 1.05rem;
+    }
+    th {
+      background: linear-gradient(90deg, #4e73df 0%, #224abe 100%);
+      color: white;
+      border-radius: 12px 12px 0 0;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      border: none;
+    }
+    tbody tr {
+      background: rgba(255,255,255,0.93);
+      border-radius: 16px;
+      box-shadow: 0 4px 16px rgba(78, 115, 223, 0.08);
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    tbody tr:hover {
+      box-shadow: 0 8px 32px rgba(78, 115, 223, 0.15);
+      background: #f6f9ff;
+      transform: translateY(-2px) scale(1.01);
+    }
+    .delete-btn {
+      background: #ff4d4d;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 2px;
+      margin-right: 2px;
+      box-shadow: 0 2px 8px #ff4d4d33;
+      transition: background 0.3s, color 0.3s, transform 0.2s;
+    }
+    .delete-btn:hover {
+      background: #cc0000;
+      color: #ffe066;
+      transform: scale(1.07);
+    }
+    .delete-btn[style*="background:#4e73df"] {
+      background: linear-gradient(90deg, #4e73df 0%, #224abe 100%) !important;
+      color: #fff !important;
+    }
+    .delete-btn[style*="background:#4e73df"]:hover {
+      background: linear-gradient(90deg, #224abe 0%, #4e73df 100%) !important;
+      color: #ffe066 !important;
+    }
+    footer {
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 36px;
+      font-weight: bold;
+      margin-top: auto;
+      border-top-left-radius: 28px;
+      border-top-right-radius: 28px;
+      font-size: 1.08rem;
+      box-shadow: 0 -4px 15px rgba(0,114,255,0.13);
+    }
+    .footer-left a, .footer-right a {
+      color: white;
+      text-decoration: none;
+      transition: color 0.3s;
+      font-weight: 600;
+    }
+    .footer-left a:hover, .footer-right a:hover {
+      color: #ffe066;
+      text-shadow: 0 0 8px #0072ff;
+    }
+    .footer-center {
+      font-style: italic;
+      color: #ffe066;
+      text-shadow: 0 2px 8px #0072ff22;
+    }
+    @media (max-width: 900px) {
+      .container { padding: 18px 2vw 20px 2vw; }
+      form input, form select, form button, form textarea { min-width: 170px; }
+      header, footer { padding: 14px 10px; }
+    }
+    @media (max-width: 600px) {
+      .container { padding: 10px 2vw 10px 2vw; }
+      form { padding: 12px 2vw 10px 2vw; }
+      .header-left { font-size: 1.1rem; }
+      .footer-center { font-size: 0.95rem; }
+      th, td { padding: 10px 4px; font-size: 0.98rem; }
+    }
+  </style>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+</head>
+<body>
+
+<header>
+  <div class="header-left">📚 Manage Library Books</div>
+  <div class="header-right">
+    <a href="aboutus.html">ABOUTUS</a>
+    <a href="contact.html">CONTACTUS</a>
+  </div>
+</header>
+
+<div class="container">
+  <h2>➕ Add Books</h2>
+
+  <form id="bookForm">
+    <input type="text" id="book_id" placeholder="Book ID" required>
+    <input type="text" id="book_name" placeholder="Book Name" required>
+    <input type="text" id="author" placeholder="Author" required>
+    <input type="text" id="category" placeholder="Category" required>
+    <textarea id="description" placeholder="Book Description" rows="4" required></textarea>
+    <button type="submit" id="addBookBtn">Add Book</button>
+    <button type="button" id="updateBookBtn" style="display:none;background:#4e73df;margin-left:10px;">Update Book</button>
+    <button type="button" id="cancelEditBtn" style="display:none;background:#aaa;margin-left:10px;">Cancel</button>
+  </form>
+
+  <table id="booksTable">
+    <thead>
+      <tr>
+        <th>Book ID</th>
+        <th>Name</th>
+        <th>Author</th>
+        <th>Category</th>
+        <th>Description</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Book entries will appear here -->
+    </tbody>
+  </table>
+</div>
+
+<footer>
+  <div class="footer-left"><a href="faq.html">FAQ</a></div>
+  <div class="footer-center">📖 “A room without books is like a body without a soul.” — Cicero</div>
+  <div class="footer-right"><a href="feedback.html">FEEDBACK</a></div>
+</footer>
+
+<script>
+  // Call loadBooks on page load to ensure the table is always populated
+  document.addEventListener('DOMContentLoaded', function () {
+    loadBooks();  // This will reload the books from the backend
+  });
+
+  let editingBookId = null;
+
+  document.getElementById('bookForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    if (editingBookId) return; // Prevent add if in edit mode
+
+    const bookId = document.getElementById('book_id').value;
+    const bookName = document.getElementById('book_name').value;
+    const author = document.getElementById('author').value;
+    const category = document.getElementById('category').value;
+    const description = document.getElementById('description').value;
+
+    const response = await fetch('http://localhost:5000/books', {  // Backend URL
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        book_id: bookId,
+        book_name: bookName,
+        author: author,
+        category: category,
+        description: description,
+        action: 'add'
+      })
+    });
+
+    const result = await response.json();
+    if (result.success) {
+      alert(result.message);
+      // Store recommended book notification in localStorage for notification page
+      let recommendedBooks = JSON.parse(localStorage.getItem('recommendedBooks')) || [];
+      recommendedBooks.push({
+        book_name: bookName,
+        book_id: bookId,
+        author: author,
+        category: category,
+        description: description,
+        added_at: new Date().toISOString()
+      });
+      localStorage.setItem('recommendedBooks', JSON.stringify(recommendedBooks));
+      loadBooks(); // reload books table after adding
+      this.reset(); // clear the form
+    } else {
+      alert('Error: ' + result.message);
+    }
+  });
+
+  document.getElementById('updateBookBtn').addEventListener('click', async function() {
+    const bookId = document.getElementById('book_id').value;
+    const bookName = document.getElementById('book_name').value;
+    const author = document.getElementById('author').value;
+    const category = document.getElementById('category').value;
+    const description = document.getElementById('description').value;
+
+    const response = await fetch('http://localhost:5000/books', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        book_id: bookId,
+        book_name: bookName,
+        author: author,
+        category: category,
+        description: description,
+        action: 'update'
+      })
+    });
+
+    const result = await response.json();
+    if (result.success) {
+      alert(result.message);
+      loadBooks();
+      resetForm();
+    } else {
+      alert('Error: ' + result.message);
+    }
+  });
+
+  document.getElementById('cancelEditBtn').addEventListener('click', function() {
+    resetForm();
+  });
+
+  async function loadBooks() {
+    const response = await fetch('http://localhost:5000/books');
+    const books = await response.json();
+    const tableBody = document.getElementById('booksTable').querySelector('tbody');
+    tableBody.innerHTML = '';
+
+    books.forEach(book => {
+      const row = `
+        <tr>
+          <td>${book.book_id}</td>
+          <td>${book.book_name}</td>
+          <td>${book.author}</td>
+          <td>${book.category}</td>
+          <td>${book.description}</td>
+          <td>
+            <button class="delete-btn" onclick="deleteBook('${book.book_id}')">Delete</button>
+            <button class="delete-btn" style="background:#4e73df;margin-left:8px;" onclick="modifyBook('${book.book_id}')">Modify</button>
+          </td>
+        </tr>
+      `;
+      tableBody.innerHTML += row;
+    });
+  }
+
+  async function deleteBook(bookId) {
+    if (!confirm('Are you sure you want to delete this book?')) return;
+
+    const response = await fetch('http://localhost:5000/books', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        book_id: bookId,
+        action: 'delete'
+      })
+    });
+
+    const result = await response.json();
+    if (result.success) {
+      alert(result.message);
+      loadBooks(); // reload books table after deletion
+    } else {
+      alert('Error: ' + result.message);
+    }
+  }
+
+  function modifyBook(bookId) {
+    const books = Array.from(document.querySelectorAll('#booksTable tbody tr'));
+    const row = books.find(r => r.children[0].textContent === bookId);
+    if (!row) return;
+    document.getElementById('book_id').value = row.children[0].textContent;
+    document.getElementById('book_name').value = row.children[1].textContent;
+    document.getElementById('author').value = row.children[2].textContent;
+    document.getElementById('category').value = row.children[3].textContent;
+    document.getElementById('description').value = row.children[4].textContent;
+    document.getElementById('book_id').readOnly = true;
+    document.getElementById('addBookBtn').style.display = 'none';
+    document.getElementById('updateBookBtn').style.display = '';
+    document.getElementById('cancelEditBtn').style.display = '';
+    editingBookId = bookId;
+    document.getElementById('book_name').focus();
+  }
+
+  function resetForm() {
+    document.getElementById('bookForm').reset();
+    document.getElementById('book_id').readOnly = false;
+    document.getElementById('addBookBtn').style.display = '';
+    document.getElementById('updateBookBtn').style.display = 'none';
+    document.getElementById('cancelEditBtn').style.display = 'none';
+    editingBookId = null;
+  }
+</script>
+
+</body>
+</html>

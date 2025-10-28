@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Events | Library Management</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+  <style>
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+      font-family: 'Segoe UI', 'Poppins', Arial, sans-serif;
+      color: #222;
+      margin: 0;
+    }
+    .main-header {
+      background: linear-gradient(90deg, #4e73df 0%, #224abe 100%);
+      color: #fff;
+      padding: 2rem 0 1rem 0;
+      border-bottom-left-radius: 32px;
+      border-bottom-right-radius: 32px;
+      box-shadow: 0 8px 32px rgba(78, 115, 223, 0.15);
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .main-header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 0.5rem;
+    }
+    .main-header p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      margin-bottom: 0;
+    }
+    .glass-card {
+      background: rgba(255,255,255,0.85);
+      border-radius: 24px;
+      box-shadow: 0 8px 32px rgba(78, 115, 223, 0.10);
+      backdrop-filter: blur(8px);
+      padding: 2rem 2rem 1.5rem 2rem;
+      margin-bottom: 2rem;
+      border: 1px solid rgba(78, 115, 223, 0.10);
+      transition: box-shadow 0.2s;
+    }
+    .glass-card:hover {
+      box-shadow: 0 12px 40px rgba(78, 115, 223, 0.18);
+    }
+    .form-control, .form-select, textarea {
+      border-radius: 12px;
+      border: 1px solid #d1d9e6;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      transition: border 0.2s;
+    }
+    .form-control:focus, .form-select:focus, textarea:focus {
+      border-color: #4e73df;
+      box-shadow: 0 0 0 2px #4e73df22;
+    }
+    .btn-primary {
+      background: linear-gradient(90deg, #4e73df 0%, #224abe 100%);
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      letter-spacing: 0.5px;
+      transition: background 0.2s, transform 0.2s;
+      box-shadow: 0 2px 8px rgba(78, 115, 223, 0.10);
+    }
+    .btn-primary:hover {
+      background: linear-gradient(90deg, #224abe 0%, #4e73df 100%);
+      transform: translateY(-2px) scale(1.03);
+    }
+    hr {
+      border-top: 2px solid #e3e6f0;
+      margin: 2rem 0 1.5rem 0;
+    }
+    h4 {
+      font-weight: 700;
+      color: #224abe;
+      margin-bottom: 1.2rem;
+      letter-spacing: 0.5px;
+    }
+    /* Event Cards */
+    #eventsList .card {
+      border-radius: 18px;
+      border: none;
+      box-shadow: 0 4px 16px rgba(78, 115, 223, 0.08);
+      background: rgba(255,255,255,0.93);
+      margin-bottom: 1.5rem;
+      transition: box-shadow 0.2s;
+    }
+    #eventsList .card:hover {
+      box-shadow: 0 8px 32px rgba(78, 115, 223, 0.15);
+      background: #f6f9ff;
+    }
+    #eventsList .card-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #224abe;
+    }
+    #eventsList .card-subtitle {
+      font-size: 1rem;
+      color: #4e73df;
+      margin-bottom: 0.7rem;
+    }
+    #eventsList .card-text {
+      font-size: 1.05rem;
+      color: #333;
+    }
+    #eventsList small.text-muted {
+      color: #6c757d !important;
+    }
+    @media (max-width: 600px) {
+      .glass-card {
+        padding: 1rem 0.5rem;
+      }
+      .main-header h1 {
+        font-size: 1.5rem;
+      }
+      .main-header p {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="main-header">
+    <h1><i class="fas fa-calendar-plus me-2"></i>Admin - Library Events</h1>
+    <p>Manage and publish upcoming library events.</p>
+  </div>
+  <div class="container py-4">
+    <div class="glass-card shadow" style="background: linear-gradient(120deg, #f6f9ff 80%, #e0eafc 100%); border: none; box-shadow: 0 8px 32px rgba(78,115,223,0.10); border-radius: 32px;">
+      <h4 class="mb-4" style="font-weight:700; color:#224abe;">
+        <i class="fas fa-plus-circle me-2"></i>Add New Event
+      </h4>
+      <form id="eventForm" autocomplete="off">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <input type="text" class="form-control shadow-sm" name="title" placeholder="Event Title" required>
+          </div>
+          <div class="col-md-3">
+            <input type="date" class="form-control shadow-sm" name="date" required>
+          </div>
+          <div class="col-md-3">
+            <input type="time" class="form-control shadow-sm" name="time" required>
+          </div>
+          <div class="col-md-6">
+            <input type="text" class="form-control shadow-sm" name="location" placeholder="Location or Online Link" required>
+          </div>
+          <div class="col-md-6">
+            <select class="form-select shadow-sm" name="category" required>
+              <option selected disabled>Choose Category</option>
+              <option>Workshop</option>
+              <option>Webinar</option>
+              <option>Book Fair</option>
+              <option>Discussion Panel</option>
+              <option>Author Visit</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="col-md-12">
+            <textarea class="form-control shadow-sm" name="description" rows="3" placeholder="Event Description" required></textarea>
+          </div>
+          <div class="col-md-6">
+            <input type="file" class="form-control shadow-sm" name="image" accept="image/*">
+          </div>
+          <div class="col-md-6 align-self-end">
+            <button type="submit" class="btn btn-primary w-100 shadow">
+              <i class="fas fa-paper-plane me-2"></i>Publish Event
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <hr>
+    <h4 class="mb-3"><i class="fas fa-list me-2"></i>All Events</h4>
+    <div class="mb-3 d-flex flex-wrap gap-2">
+      <button class="btn btn-outline-primary btn-sm" id="filter-all" type="button">All Events</button>
+      <button class="btn btn-outline-success btn-sm" id="filter-upcoming" type="button">Upcoming Events</button>
+      <button class="btn btn-outline-secondary btn-sm" id="filter-past" type="button">Past Events</button>
+      <input type="text" class="form-control form-control-sm ms-auto" style="max-width:220px;" id="search-events" placeholder="Search events...">
+    </div>
+    <div id="eventsList"></div>
+  </div>
+  <script>
+    let editMode = false;
+    let editingEventId = null;
+    let allEvents = [];
+    let searchQuery = "";
+
+    function renderEvents(events) {
+      const container = document.getElementById('eventsList');
+      console.log("Fetched events:", events); // Debug: See what is fetched
+      // Filter by search query if present
+      let filteredEvents = events;
+      if (searchQuery.trim()) {
+        const q = searchQuery.trim().toLowerCase();
+        filteredEvents = events.filter(ev =>
+          (ev.title && ev.title.toLowerCase().includes(q)) ||
+          (ev.description && ev.description.toLowerCase().includes(q)) ||
+          (ev.category && ev.category.toLowerCase().includes(q)) ||
+          (ev.location && ev.location.toLowerCase().includes(q))
+        );
+      }
+      if (!Array.isArray(filteredEvents) || !filteredEvents.length) {
+        container.innerHTML = '<div class="alert alert-info">No events found.</div>';
+        return;
+      }
+      container.innerHTML = filteredEvents.map(ev => `
+        <div class="mb-4">
+          <div class="card shadow border-0" style="border-left: 6px solid #4e73df; background: linear-gradient(120deg, #f6f9ff 80%, #e0eafc 100%);">
+            <div class="row g-0 align-items-center">
+              <div class="col-12 col-md-3 text-center py-3 px-2" style="background:rgba(78,115,223,0.07);border-radius:16px 0 0 16px;">
+                <div class="d-flex flex-column align-items-center justify-content-center h-100">
+                  <div class="fw-bold text-primary" style="font-size:1.5rem;">
+                    <i class="far fa-calendar-alt me-2"></i>${ev.event_date}
+                  </div>
+                  ${ev.event_time ? `<div class="text-secondary mt-1"><i class="far fa-clock me-1"></i>${ev.event_time}</div>` : ''}
+                </div>
+              </div>
+              <div class="col-12 col-md-9">
+                <div class="card-body py-3 px-4">
+                  <div class="d-flex align-items-center mb-2">
+                    <h5 class="card-title mb-0 flex-grow-1 text-gradient" style="font-weight:700;">
+                      <i class="fas fa-book-open me-2"></i>${ev.title}
+                    </h5>
+                    <span class="badge bg-info text-dark ms-2" style="font-size:0.95em;"><i class="fas fa-tag me-1"></i>${ev.category}</span>
+                  </div>
+                  <p class="card-text mb-1" style="font-size:1.08rem;">${ev.description}</p>
+                  <div class="d-flex align-items-center mt-2">
+                    <span class="text-muted"><i class="fas fa-map-marker-alt me-1"></i>${ev.location}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-end mt-2">
+            <button class="btn btn-sm btn-warning shadow" style="min-width:90px; font-weight:600;" onclick="startEditEvent(${ev.id || ev.event_id}, this)">
+              <i class="fas fa-edit me-1"></i>Modify
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function fetchAndShowEvents() {
+      fetch('http://127.0.0.1:5000/events')
+        .then(res => res.json())
+        .then(events => {
+          allEvents = events;
+          renderEvents(events);
+        })
+        .catch((err) => {
+          console.error("Error fetching events:", err);
+          document.getElementById('eventsList').innerHTML = '<div class="alert alert-danger">Failed to load events.</div>';
+        });
+    }
+
+    // Filtering logic
+    function filterEvents(type) {
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      let filtered = [];
+      if (type === 'all') {
+        filtered = allEvents;
+      } else if (type === 'upcoming') {
+        filtered = allEvents.filter(ev => {
+          if (!ev.event_date) return false;
+          const evDate = new Date(ev.event_date);
+          evDate.setHours(0,0,0,0);
+          return evDate >= today;
+        });
+      } else if (type === 'past') {
+        filtered = allEvents.filter(ev => {
+          if (!ev.event_date) return false;
+          const evDate = new Date(ev.event_date);
+          evDate.setHours(0,0,0,0);
+          return evDate < today;
+        });
+      }
+      renderEvents(filtered);
+    }
+
+    document.getElementById('filter-all').onclick = () => { setActiveFilterBtn('all'); filterEvents('all'); };
+    document.getElementById('filter-upcoming').onclick = () => { setActiveFilterBtn('upcoming'); filterEvents('upcoming'); };
+    document.getElementById('filter-past').onclick = () => { setActiveFilterBtn('past'); filterEvents('past'); };
+
+    function startEditEvent(eventId, btn) {
+      fetch(`http://127.0.0.1:5000/event/${eventId}`)
+        .then(res => res.json())
+        .then(ev => {
+          const form = document.getElementById('eventForm');
+          form.title.value = ev.title;
+          form.date.value = ev.event_date;
+          form.time.value = ev.event_time;
+          form.location.value = ev.location;
+          form.category.value = ev.category;
+          form.description.value = ev.description;
+          // Don't set image input for security reasons
+          editMode = true;
+          editingEventId = eventId;
+          form.querySelector('button[type="submit"]').innerHTML = '<i class="fas fa-save me-2"></i>Update Event';
+        })
+        .catch(() => alert('Failed to load event for editing.'));
+    }
+
+    document.getElementById('eventForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      let url = 'http://127.0.0.1:5000/add-event';
+      let method = 'POST';
+      if (editMode && editingEventId) {
+        url = `http://127.0.0.1:5000/update-event/${editingEventId}`;
+        method = 'POST'; // Or 'PUT' if your backend expects it
+      }
+      fetch(url, {
+        method: method,
+        body: formData
+      })
+      .then(async response => {
+        let data = {};
+        try { data = await response.json(); } catch {}
+        if (response.ok && data.success) {
+          alert(editMode ? 'Event updated successfully!' : 'Event added successfully!');
+          this.reset();
+          editMode = false;
+          editingEventId = null;
+          this.querySelector('button[type="submit"]').innerHTML = '<i class="fas fa-paper-plane me-2"></i>Publish Event';
+          fetchAndShowEvents();
+        } else {
+          alert(data.message || `Error: ${response.status} ${response.statusText}`);
+        }
+      })
+      .catch(error => {
+        alert('Network or server error: ' + error);
+      });
+    });
+
+    document.getElementById('search-events').addEventListener('input', function() {
+      searchQuery = this.value;
+      // Re-filter using the last selected filter (default to 'all')
+      if (document.getElementById('filter-all').classList.contains('active')) filterEvents('all');
+      else if (document.getElementById('filter-upcoming').classList.contains('active')) filterEvents('upcoming');
+      else if (document.getElementById('filter-past').classList.contains('active')) filterEvents('past');
+      else filterEvents('all');
+    });
+
+    // Highlight active filter button
+    function setActiveFilterBtn(type) {
+      document.getElementById('filter-all').classList.remove('active');
+      document.getElementById('filter-upcoming').classList.remove('active');
+      document.getElementById('filter-past').classList.remove('active');
+      if (type === 'all') document.getElementById('filter-all').classList.add('active');
+      if (type === 'upcoming') document.getElementById('filter-upcoming').classList.add('active');
+      if (type === 'past') document.getElementById('filter-past').classList.add('active');
+    }
+
+    // Load events on page load
+    fetchAndShowEvents();
+  </script>
+</body>
+</html>

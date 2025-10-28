@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - Library Management System</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background: linear-gradient(to bottom right, #e0f7fa, #ffffff);
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      color: white;
+      padding: 20px 30px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+    }
+    .left {
+      display: flex;
+      align-items: center;
+    }
+    .left h1 {
+      margin: 0;
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .nav-links {
+      margin-left: 30px;
+      display: flex;
+      gap: 20px;
+    }
+    .nav-links a {
+      color: white;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 8px 15px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+    }
+    .nav-links a:hover {
+      background: rgba(255, 255, 255, 0.25);
+      color: #ffeb3b;
+      transform: translateY(-2px) scale(1.05);
+    }
+    /* Style the Logout button like a nav link */
+    #adminLogoutButton {
+      color: white;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 8px 15px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+      border: none; /* Remove default button border */
+      cursor: pointer; /* Add pointer cursor */
+      font-family: 'Poppins', sans-serif; /* Ensure font matches */
+      font-size: inherit; /* Inherit font size from parent */
+    }
+    #adminLogoutButton:hover {
+      background: rgba(255, 255, 255, 0.25);
+      color: #ffeb3b;
+      transform: translateY(-2px) scale(1.05);
+    }
+    .right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .right a {
+      color: white;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 8px 15px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+    }
+    .right a:hover {
+      background: rgba(255, 255, 255, 0.25);
+      color: #ffeb3b;
+      transform: translateY(-2px) scale(1.05);
+    }
+    .background {
+      flex: 1;
+      background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
+                  url('https://t4.ftcdn.net/jpg/11/30/71/25/360_F_1130712561_0BZGSGHTFa3iMLv1eVHQQlGZCP8jxq14.jpg') center/cover no-repeat;
+      height: 300px;
+      border-radius: 20px;
+      margin: 20px;
+      box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
+      animation: zoomIn 2s ease;
+    }
+    @keyframes zoomIn {
+      from {
+        transform: scale(0.95);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    .welcome {
+      text-align: center;
+      padding: 40px 20px;
+      margin: 20px;
+      background: rgba(31, 45, 61, 0.85);
+      color: white;
+      font-size: 18px;
+      font-weight: 600;
+      border-radius: 20px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      animation: fadeIn 2s ease;
+    }
+    .welcome h2 {
+      font-size: 28px;
+      color: #00ffcc;
+      margin-bottom: 20px;
+      font-weight: 800;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      color: white;
+      font-weight: bold;
+      box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.2);
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      margin-top: auto;
+    }
+    .footer-left, .footer-center, .footer-right {
+      flex: 1;
+      text-align: center;
+    }
+    .footer-left a, .footer-right a {
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .footer-left a::after, .footer-right a::after {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 2px;
+      background: #ffeb3b;
+      left: 50%;
+      bottom: -5px;
+      transition: width 0.3s ease, left 0.3s ease;
+    }
+    .footer-left a:hover::after, .footer-right a:hover::after {
+      width: 100%;
+      left: 0;
+    }
+    .footer-left a:hover, .footer-right a:hover {
+      color: #ffeb3b;
+      transform: scale(1.1);
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header>
+  <div class="left">
+    <h1>🛡️ ADMIN PANEL DASHBOARD</h1>
+    <div class="nav-links">
+      
+      <a href="manage-books.html">BOOKS</a>
+      <a href="adminstudent.html">STUDENTS</a>
+      <a href="issue-returnbook.html">ISSUE/RETURN</a>
+      <a href="reviewsadmin.html">REVIEWS</a>
+      <a href="adminevents.html">EVENTS</a>
+
+     
+      <button id="adminLogoutButton" class="btn btn-danger">Logout</button>
+
+    </div>
+  </div>
+  <div class="right">
+    <a href="aboutus.html">ABOUTUS</a>
+    <a href="contact.html">CONTACTUS</a>
+  </div>
+</header>
+
+<!-- Background Section -->
+<div class="background"></div>
+
+<!-- Welcome Section -->
+<section class="welcome">
+  <h2>Welcome, Administrator!</h2>
+  <p>🛡️ "As the guardian of knowledge, your role is vital in maintaining the integrity and growth of our library. 
+  Here, you can manage books, students, track records, and ensure a smooth journey for every reader. 
+  Empower learning. Empower dreams. Welcome to the control room of limitless possibilities!"</p>
+</section>
+
+<footer>
+  <div class="footer-left">
+    <a href="faq.html"> FAQ</a>
+  </div>
+  <div class="footer-center">
+    <p>“Management is doing things right; leadership is doing the right things.” – Peter Drucker</p>
+  </div>
+  <div class="footer-right">
+    <a href="feedback.html">📝FEEDBACK</a>
+  </div>
+</footer>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const logoutButton = document.getElementById('adminLogoutButton');
+
+    if (logoutButton) {
+      logoutButton.addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent default button behavior if it's inside a form
+
+        console.log('Admin logout initiated...');
+
+        // Optional: Call the backend logout endpoint
+        fetch('/admin-logout', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+            // Add any necessary auth headers if you implement token-based auth later
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            console.log('Logout successful on backend.');
+          } else {
+            console.warn('Backend logout endpoint reported an issue, but redirecting anyway.');
+          }
+          // Redirect to mainadmin.html regardless of backend response
+          window.location.href = 'mainadmin.html'; // Redirect to the main admin login page
+        })
+        .catch(error => {
+          console.error('Error calling logout endpoint:', error);
+          // Still redirect even if the backend call fails
+          window.location.href = 'mainadmin.html'; // Redirect to the main admin login page
+        });
+      });
+    } else {
+      console.error('Logout button with ID "adminLogoutButton" not found.');
+    }
+  });
+</script>
+
+</body>
+</html>

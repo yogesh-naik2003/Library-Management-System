@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Dashboard | Library System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #e3f2fd, #e0f7fa);
+      margin: 0;
+      padding: 20px;
+    }
+    .dashboard-header {
+      text-align: center;
+      padding-bottom: 30px;
+    }
+    .dashboard-header h1 {
+      font-size: 36px;
+      color: #0d47a1;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .dashboard-header p {
+      font-size: 18px;
+      color: #555;
+    }
+    .feature-card {
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      background: linear-gradient(135deg, #ffffff, #f9f9f9);
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(0, 172, 193, 0.2), transparent);
+      transform: rotate(45deg);
+      transition: opacity 0.5s ease;
+      opacity: 0;
+    }
+    .feature-card:hover::before {
+      opacity: 1;
+    }
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+    }
+    .feature-icon {
+      font-size: 50px;
+      color: #00acc1;
+      margin-bottom: 15px;
+      animation: bounce 1.5s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+    .card-title {
+      color: #006064;
+      font-weight: 600;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    .card-text {
+      font-size: 16px;
+      color: #555;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .dark-mode-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #006064;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+    .dark-mode-toggle:hover {
+      background: #004d40;
+    }
+    .dark-mode {
+      background-color: #1e1e1e;
+      color: white;
+    }
+    .dark-mode .feature-card {
+      background: linear-gradient(to bottom, #2e2e2e, #1e1e1e);
+      box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
+    }
+    .dark-mode .feature-card::before {
+      background: radial-gradient(circle, rgba(128, 222, 234, 0.2), transparent);
+    }
+    .dark-mode .feature-icon {
+      color: #80deea;
+    }
+    .dark-mode .card-title {
+      color: #80deea;
+    }
+    .dark-mode .card-text {
+      color: #ddd;
+    }
+  </style>
+</head>
+<body>
+  <button class="dark-mode-toggle" onclick="toggleDarkMode()"> Dark Mode</button>
+
+  <div class="dashboard-header">
+    <h1>📚 Student Dashboard</h1>
+    <p>Welcome! Explore your personalized library features below.</p>
+  </div>
+
+  <div class="container">
+    <div class="row g-4">
+      <!-- Feature Cards -->
+      <div class="col-md-4">
+        <a href="recommended-books.html" class="text-decoration-none">
+          <div class="card feature-card text-center p-4">
+            <div class="feature-icon">⭐</div>
+            <div class="card-body">
+              <h5 class="card-title">Recommended Books</h5>
+              <p class="card-text">Get book suggestions tailored to your interests and reading history.</p>
+            </div>
+          </div>
+        </a>
+      </div>
+      <div class="col-md-4">
+        <a href="notification.html" class="text-decoration-none">
+          <div class="card feature-card text-center p-4">
+            <div class="feature-icon">🔔</div>
+            <div class="card-body">
+              <h5 class="card-title">Notifications & Reminders</h5>
+              <p class="card-text">Stay updated about due dates, new arrivals, and events.</p>
+            </div>
+          </div>
+        </a>
+      </div>
+      <div class="col-md-4">
+        <a href="ebooks.html" class="text-decoration-none">
+          <div class="card feature-card text-center p-4">
+            <div class="feature-icon">📄</div>
+            <div class="card-body">
+              <h5 class="card-title">E-Books & PDFs</h5>
+              <p class="card-text">Access and download course-related e-books and study materials.</p>
+            </div>
+          </div>
+        </a>
+      </div>
+      <div class="col-md-4">
+        <a href="library-eventsstudent.html" class="text-decoration-none">
+          <div class="card feature-card text-center p-4">
+            <div class="feature-icon">🎓</div>
+            <div class="card-body">
+              <h5 class="card-title">Library Events & Workshops</h5>
+              <p class="card-text">Register for upcoming workshops and knowledge sessions.</p>
+            </div>
+          </div>
+        </a>
+      </div>
+      <div class="col-md-4">
+        <a href="Borrowbook.html" class="text-decoration-none">
+          <div class="card feature-card text-center p-4">
+            <div class="feature-icon">🔖</div>
+            <div class="card-body">
+              <h5 class="card-title">Borrowed/Favorite Books</h5>
+              <p class="card-text">Easily save and revisit your favorite reads anytime.</p>
+            </div>
+          </div>
+        </a>
+      </div>
+      <div class="col-md-4">
+        <a href="forums.html" class="text-decoration-none">
+          <div class="card feature-card text-center p-4">
+            <div class="feature-icon">💬</div>
+            <div class="card-body">
+              <h5 class="card-title">Study Groups & Forums</h5>
+              <p class="card-text">Connect with peers, share insights, and collaborate on topics.</p>
+            </div>
+          </div>
+        </a>
+      </div>
+      <div class="col-md-4">
+        <a href="feedback.html" class="text-decoration-none">
+          <div class="card feature-card text-center p-4">
+            <div class="feature-icon">🆘</div>
+            <div class="card-body">
+              <h5 class="card-title">Help Center</h5>
+              <p class="card-text">Need help? Reach out with feedback or queries anytime.</p>
+            </div>
+          </div>
+        </a>
+      </div>
+      <div class="col-md-4">
+        <a href="qr-scanner.html" class="text-decoration-none">
+          <div class="card feature-card text-center p-4">
+            <div class="feature-icon">📷</div>
+            <div class="card-body">
+              <h5 class="card-title">QR Code Scanner</h5>
+              <p class="card-text">Scan book QR codes to instantly view availability and info.</p>
+            </div>
+          </div>
+        </a>
+      </div>
+      <div class="col-md-4">
+        <a href="review.html" class="text-decoration-none">
+          <div class="card feature-card text-center p-4">
+            <div class="feature-icon">⭐</div>
+            <div class="card-body">
+              <h5 class="card-title">Book Reviews & Ratings</h5>
+              <p class="card-text">Share your thoughts and help others discover great books.</p>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+    }
+  </script>
+</body>
+</html>

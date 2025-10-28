@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Student Registration</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      display: flex;
+      height: 100vh;
+      flex-direction: column;
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 15px 30px;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    header nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header .logo {
+      font-size: 24px;
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+
+    header nav a {
+      color: #fff;
+      text-decoration: none;
+      margin: 0 20px;
+      font-size: 18px;
+      font-weight: 500;
+      text-transform: uppercase;
+      transition: color 0.3s ease;
+    }
+
+    header nav a:hover {
+      color: #2575fc;
+    }
+
+    .container {
+      display: flex;
+      flex: 1;
+      margin-top: 80px;
+    }
+
+    .left-panel {
+      flex: 1;
+      background: url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f') no-repeat center center/cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      padding: 40px;
+      position: relative;
+      background-size: cover;
+    }
+
+    .left-panel h1 {
+      font-size: 2.5em;
+      max-width: 400px;
+      text-align: center;
+      backdrop-filter: brightness(60%);
+      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+    }
+
+    .form-wrapper {
+      flex: 1.2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #ffffff;
+      padding: 30px;
+    }
+
+    .form-box {
+      width: 100%;
+      max-width: 500px;
+      background: #ffffff;
+      box-shadow: 0 6px 30px rgba(0,0,0,0.1);
+      border-radius: 15px;
+      padding: 30px;
+      animation: fadeIn 0.8s ease-in;
+      overflow: hidden;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+      font-weight: 700;
+      font-size: 24px;
+      text-transform: uppercase;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+      color: #444;
+      font-size: 16px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      color: #444;
+      background: #f8f8f8;
+      transition: all 0.3s ease;
+    }
+
+    input:focus {
+      border-color: #2575fc;
+      outline: none;
+      box-shadow: 0 0 8px rgba(37, 117, 252, 0.3);
+      background: #eaf2ff;
+    }
+
+    .terms {
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    .terms input {
+      margin-right: 6px;
+    }
+
+    .terms a {
+      color: #2575fc;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .terms a:hover {
+      color: #6a11cb;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #2575fc;
+      color: #fff;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      margin-top: 20px;
+    }
+
+    button:hover {
+      background: #6a11cb;
+      box-shadow: 0 4px 15px rgba(37, 117, 252, 0.4);
+    }
+
+    p {
+      text-align: center;
+      font-size: 14px;
+      margin-top: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      .left-panel {
+        height: 200px;
+      }
+    }
+
+    footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+      margin-top: 30px;
+    }
+
+    footer a {
+      color: white;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+
+    footer a:hover {
+      color: #2575fc;
+    }
+
+    /* Modern Popup Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0; top: 0; width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.4);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal {
+      background: #222;
+      color: #fff;
+      border-radius: 16px;
+      padding: 32px 24px 24px 24px;
+      max-width: 350px;
+      width: 90%;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+      text-align: center;
+      animation: fadeInModal 0.3s;
+    }
+    .modal.success { border-top: 6px solid #45f3ff; }
+    .modal.error { border-top: 6px solid #ff2770; }
+    .modal button {
+      margin-top: 18px;
+      padding: 10px 28px;
+      border: none;
+      border-radius: 24px;
+      background: linear-gradient(45deg, #45f3ff, #0072ff);
+      color: #222;
+      font-weight: bold;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .modal button:hover {
+      background: linear-gradient(45deg, #0072ff, #45f3ff);
+      color: #fff;
+    }
+    @keyframes fadeInModal {
+      from { opacity: 0; transform: translateY(-30px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="logo">Library System</div>
+      <div>
+        <a href="mainstudent.html">Home</a>
+        <a href="aboutus.html">About Us</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div class="left-panel">
+      <h1>Welcome to the Student Registration</h1>
+    </div>
+    <div class="form-wrapper">
+      <div class="form-box">
+        <h2>Student Registration</h2>
+        <form id="registerForm" action="http://127.0.0.1:5000/register" method="POST">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" name="fullName" required />
+          </div>
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" name="username" required />
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" name="email" required />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" name="password" required />
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" name="phone" required />
+          </div>
+          <input type="hidden" name="role" value="student" />
+          <div class="form-group">
+            <label>Library Card Number</label>
+            <input type="text" name="libraryCard" />
+          </div>
+          <div class="form-group">
+            <label>USN</label>
+            <input type="text" name="usn" />
+          </div>
+          <div class="form-group">
+            <label>Branch</label>
+            <input type="text" name="branch" />
+          </div>
+          <div class="form-group">
+            <label>Student ID</label>
+            <input type="text" name="userId" />
+          </div>
+          <div class="form-group">
+            <label>Date of Birth</label>
+            <input type="date" name="dob" required />
+          </div>
+          <div class="terms">
+            <input type="checkbox" name="terms" required />
+            I agree to the <a href="#">Terms & Conditions</a>
+          </div>
+          <button type="submit">Register</button>
+          <p>Already have an account? <a href="loginstudent.html">Login Here</a></p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modern Popup Modal -->
+  <div class="modal-overlay" id="popupModal">
+    <div class="modal" id="popupModalBox">
+      <div id="popupModalMsg"></div>
+      <button id="popupModalBtn">OK</button>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Library Management System. All Rights Reserved.</p>
+    <p>Follow us: <a href="#">Facebook</a> | <a href="#">Twitter</a> | <a href="#">Instagram</a></p>
+  </footer>
+
+  <script>
+    // Modern popup logic for registration
+    function showPopup(message, isSuccess, callback) {
+      const overlay = document.getElementById('popupModal');
+      const box = document.getElementById('popupModalBox');
+      const msg = document.getElementById('popupModalMsg');
+      const btn = document.getElementById('popupModalBtn');
+      msg.textContent = message;
+      box.className = 'modal ' + (isSuccess ? 'success' : 'error');
+      overlay.style.display = 'flex';
+      btn.onclick = function() {
+        overlay.style.display = 'none';
+        if (callback) callback();
+      };
+    }
+
+    document.getElementById("registerForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+      const data = {};
+      formData.forEach((value, key) => {
+        data[key] = value;
+      });
+      try {
+        const response = await fetch(form.action, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+        const result = await response.json();
+        if (result.success) {
+          showPopup(result.message, true, function() {
+            window.location.href = "loginstudent.html";
+          });
+        } else {
+          showPopup("Registration failed: " + result.message, false);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        showPopup("An error occurred during registration.", false);
+      }
+    });
+  </script>
+</body>
+</html>

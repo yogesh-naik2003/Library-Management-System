@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Issue/Return Approval</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- SweetAlert2 CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" />
+  <style>
+    body {
+      background: #f0f2f5;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #333;
+    }
+    .navbar {
+      background: #4e73df;
+      box-shadow: 0 4px 8px rgba(78, 115, 223, 0.3);
+    }
+    .navbar-brand, .nav-link {
+      color: #fff !important;
+      font-weight: 600;
+    }
+    .nav-link:hover {
+      color: #f6c23e !important;
+      transition: color 0.3s ease;
+    }
+    .container {
+      margin-top: 40px;
+      margin-bottom: 40px;
+    }
+    h1, h2 {
+      font-weight: 700;
+      margin-bottom: 30px;
+      color: #4e73df;
+      text-align: center;
+    }
+    .card {
+      box-shadow: 0 4px 15px rgba(78, 115, 223, 0.2);
+      border-radius: 12px;
+      padding: 20px;
+      background: #fff;
+    }
+    table {
+      border-collapse: separate !important;
+      border-spacing: 0 10px !important;
+      width: 100%;
+    }
+    thead th {
+      background-color: #4e73df !important;
+      color: white !important;
+      border: none !important;
+      border-radius: 12px !important;
+      padding: 12px 15px !important;
+      text-align: center;
+    }
+    tbody tr {
+      background: #f8f9fc;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(78, 115, 223, 0.1);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    tbody tr:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(78, 115, 223, 0.3);
+    }
+    tbody td {
+      vertical-align: middle !important;
+      text-align: center;
+      padding: 15px 10px !important;
+      border: none !important;
+    }
+    .btn-approve {
+      background: #1cc88a;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 25px;
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 4px 10px rgba(28, 200, 138, 0.4);
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+    .btn-approve:hover {
+      background: #17a673;
+      transform: scale(1.05);
+      box-shadow: 0 6px 15px rgba(23, 166, 115, 0.6);
+    }
+    .badge-approved {
+      background-color: #1cc88a;
+      color: white;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    footer {
+      background: #4e73df;
+      color: white;
+      padding: 15px 0;
+      text-align: center;
+      font-size: 0.9rem;
+      box-shadow: 0 -4px 15px rgba(78, 115, 223, 0.3);
+      margin-top: auto;
+    }
+    footer a {
+      color: #f6c23e;
+      text-decoration: none;
+      margin: 0 10px;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+    footer a:hover {
+      color: #fff;
+      text-shadow: 0 0 8px #f6c23e;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="main.html">Library Management System</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="notifications.html">Notifications</a></li>
+          <li class="nav-item"><a class="nav-link" href="ebooks.html">E-Books</a></li>
+          <li class="nav-item"><a class="nav-link" href="adminevents.html">Events</a></li>
+          <li class="nav-item"><a class="nav-link" href="feedback.html">Feedback</a></li>
+          <li class="nav-item"><a class="nav-link" href="studentdashboard-main.html">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="login.html">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1>📋 Approval for Return Requests</h1>
+    <div class="card">
+      <div id="approvalContainer" class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Book ID</th>
+              <th>Book Name</th>
+              <th>Author</th>
+              <th>Category</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="approvalTableBody">
+            <!-- Pending requests will be rendered here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+    <div class="container">
+      <h2>Approoval for Borrow Requests</h2>
+      <div class="card">
+        <div id="approovalBorrowBooksContainer" class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Book ID</th>
+                <th>Book Name</th>
+                <th>Author</th>
+                <th>Category</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="approovalBorrowBooksTableBody">
+              <!-- Approoval for borrow books will be rendered here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <h2>✅ Approved Books</h2>
+      <div class="card">
+        <div id="approvedBooksContainer" class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Book ID</th>
+                <th>Book Name</th>
+                <th>Author</th>
+                <th>Category</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="approvedBooksTableBody">
+              <!-- Approved books will be rendered here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="container mt-5">
+      <h2>✅ Returned Books</h2>
+      <div class="card">
+        <div id="returnedBooksContainer" class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Book ID</th>
+                <th>Book Name</th>
+                <th>Author</th>
+                <th>Category</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="returnedBooksTableBody">
+              <!-- Returned books will be rendered here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  <!-- SweetAlert2 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    // Fetch pending requests from localStorage
+    function fetchPendingRequests() {
+      const pendingRequests = JSON.parse(localStorage.getItem('pendingRequests')) || [];
+      console.log('Fetched Pending Requests:', pendingRequests); // Debugging
+      return pendingRequests;
+    }
+
+    // Render pending requests
+    function renderPendingRequests() {
+      const pendingRequests = fetchPendingRequests();
+      console.log('Rendering Pending Requests:', pendingRequests); // Debugging
+      approvalTableBody.innerHTML = '';
+
+      if (pendingRequests.length === 0) {
+        approvalTableBody.innerHTML = '<tr><td colspan="5" class="text-center">No pending requests.</td></tr>';
+        return;
+      }
+
+      pendingRequests.forEach(book => {
+        const row = document.createElement('tr');
+
+        row.innerHTML = `
+          <td>${book.book_id}</td>
+          <td>${book.book_name}</td>
+          <td>${book.author}</td>
+          <td>${book.category}</td>
+          <td>
+            ${book.status === 'approved' ? '<span class="badge badge-approved">Approved</span>' : `<button class="btn btn-approve" onclick="approveRequest('${book.book_id}')">Approve</button>`}
+          </td>
+        `;
+
+        approvalTableBody.appendChild(row);
+      });
+    }
+
+    // Render Approoval for borrow books section
+    function renderApproovalBorrowBooks() {
+      const pendingRequests = JSON.parse(localStorage.getItem('pendingRequests')) || [];
+      const approovalBooks = pendingRequests.filter(book => book.status === 'pending');
+      const approovalTableBody = document.getElementById('approovalBorrowBooksTableBody');
+      approovalTableBody.innerHTML = '';
+
+      if (approovalBooks.length === 0) {
+        approovalTableBody.innerHTML = '<tr><td colspan="5" class="text-center">No borrow requests pending approval.</td></tr>';
+        return;
+      }
+
+      approovalBooks.forEach(book => {
+        const row = document.createElement('tr');
+
+        row.innerHTML = `
+          <td>${book.book_id}</td>
+          <td>${book.book_name}</td>
+          <td>${book.author}</td>
+          <td>${book.category}</td>
+          <td><button class="btn btn-approve" onclick="approveBorrowRequest('${book.book_id}')">Approve</button></td>
+        `;
+
+        approovalTableBody.appendChild(row);
+      });
+    }
+
+    // Approve borrow request from Approoval for borrow books section
+    function approveBorrowRequest(bookId) {
+      let pendingRequests = JSON.parse(localStorage.getItem('pendingRequests')) || [];
+      let borrowedBooks = JSON.parse(localStorage.getItem('borrowedBooks')) || [];
+      let approvedBooks = JSON.parse(localStorage.getItem('approvedBooks')) || [];
+
+      const bookIndex = pendingRequests.findIndex(book => book.book_id === bookId && book.status === 'pending');
+      if (bookIndex !== -1) {
+        const approvedBook = pendingRequests[bookIndex];
+        approvedBook.status = 'approved';
+
+        // Update pendingRequests
+        pendingRequests[bookIndex] = approvedBook;
+        localStorage.setItem('pendingRequests', JSON.stringify(pendingRequests));
+
+        // Add to borrowedBooks if not already present
+        if (!borrowedBooks.some(book => book.book_id === bookId)) {
+          borrowedBooks.push(approvedBook);
+          localStorage.setItem('borrowedBooks', JSON.stringify(borrowedBooks));
+        }
+
+        // Add to approvedBooks if not already present
+        if (!approvedBooks.some(book => book.book_id === bookId)) {
+          approvedBooks.push(approvedBook);
+          localStorage.setItem('approvedBooks', JSON.stringify(approvedBooks));
+        }
+
+        // Refresh sections
+        renderApproovalBorrowBooks();
+        renderApprovedBooks();
+      }
+    }
+
+    // Approve a book request
+    function approveRequest(bookId) {
+      console.log('Approve button clicked for Book ID:', bookId);
+
+      const pendingRequests = fetchPendingRequests();
+      console.log('Pending Requests:', pendingRequests);
+
+      const approvedBook = pendingRequests.find(book => book.book_id === bookId);
+      console.log('Approved Book:', approvedBook);
+
+      if (approvedBook) {
+        // Update the book status to approved instead of removing it
+        approvedBook.status = 'approved';
+        localStorage.setItem('pendingRequests', JSON.stringify(pendingRequests));
+
+        // Add the book to borrowedBooks
+        const borrowedBooks = JSON.parse(localStorage.getItem('borrowedBooks')) || [];
+        borrowedBooks.push(approvedBook);
+        localStorage.setItem('borrowedBooks', JSON.stringify(borrowedBooks));
+
+        // Show a confirmation message
+        Swal.fire({
+          icon: 'success',
+          title: 'Approved',
+          text: `Book "${approvedBook.book_name}" has been approved and added to Borrowed Books.`,
+          confirmButtonColor: '#28a745',
+        }).then(() => {
+          // Re-render the pending requests and approved books after the popup is closed
+          renderPendingRequests();
+          renderApprovedBooks();
+          // Redirect to Borrowedbooks.html page
+          window.location.href = 'Borrowedbooks.html';
+        });
+      } else {
+        console.error('Book not found in pending requests.');
+      }
+    }
+
+    // Delete approved book
+    function deleteApprovedBook(bookId) {
+      let approvedBooks = JSON.parse(localStorage.getItem('approvedBooks')) || [];
+      approvedBooks = approvedBooks.filter(book => book.book_id !== bookId);
+      localStorage.setItem('approvedBooks', JSON.stringify(approvedBooks));
+      renderApprovedBooks();
+    }
+
+    // Delete returned book
+    function deleteReturnedBook(bookId) {
+      let returnedBooks = JSON.parse(localStorage.getItem('returnedBooks')) || [];
+      returnedBooks = returnedBooks.filter(book => book.book_id !== bookId);
+      localStorage.setItem('returnedBooks', JSON.stringify(returnedBooks));
+      renderReturnedBooks();
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const approvalTableBody = document.getElementById('approvalTableBody');
+      const approvedBooksTableBody = document.getElementById('approvedBooksTableBody');
+
+      // Render pending requests
+      function renderPendingRequests() {
+        const pendingRequests = fetchPendingRequests();
+        approvalTableBody.innerHTML = '';
+
+        if (pendingRequests.length === 0) {
+          approvalTableBody.innerHTML = '<tr><td colspan="5" class="text-center">No pending requests.</td></tr>';
+          return;
+        }
+
+        pendingRequests.forEach(book => {
+          const row = document.createElement('tr');
+
+          row.innerHTML = `
+            <td>${book.book_id}</td>
+            <td>${book.book_name}</td>
+            <td>${book.author}</td>
+            <td>${book.category}</td>
+            <td>
+              ${book.status === 'approved' ? '<span class="badge badge-approved">Approved</span>' : `<button class="btn btn-approve" onclick="approveRequest('${book.book_id}')">Approve</button>`}
+            </td>
+          `;
+
+          approvalTableBody.appendChild(row);
+        });
+      }
+
+      // Set interval to refresh the approval and approved books tables every 30 seconds
+      setInterval(() => {
+        renderPendingRequests();
+        renderApprovedBooks();
+        renderApproovalBorrowBooks();
+        renderReturnRequests();
+        renderReturnedBooks();
+      }, 30000);
+
+      // Render approved books
+      function renderApprovedBooks() {
+        const approvedBooks = JSON.parse(localStorage.getItem('approvedBooks')) || [];
+        approvedBooksTableBody.innerHTML = '';
+
+        if (approvedBooks.length === 0) {
+          approvedBooksTableBody.innerHTML = '<tr><td colspan="5" class="text-center">No approved books yet.</td></tr>';
+          return;
+        }
+
+        approvedBooks.forEach(book => {
+          const row = document.createElement('tr');
+
+          row.innerHTML = `
+            <td>${book.book_id}</td>
+            <td>${book.book_name}</td>
+            <td>${book.author}</td>
+            <td>${book.category}</td>
+            <td>
+              <button class="btn btn-danger btn-sm" onclick="deleteApprovedBook('${book.book_id}')">
+                <i class="fas fa-trash-alt"></i> Delete
+              </button>
+            </td>
+          `;
+
+          approvedBooksTableBody.appendChild(row);
+        });
+      }
+
+      // Render Approoval for borrow books section
+      renderApproovalBorrowBooks();
+
+      // Initial render
+      renderPendingRequests();
+      renderApprovedBooks();
+    });
+
+    // Render returned books in issue-returnbook.html
+    function renderReturnedBooks() {
+      const returnedBooksTableBody = document.getElementById('returnedBooksTableBody');
+      const returnedBooks = JSON.parse(localStorage.getItem('returnedBooks')) || [];
+      returnedBooksTableBody.innerHTML = '';
+
+      if (returnedBooks.length === 0) {
+        returnedBooksTableBody.innerHTML = '<tr><td colspan="5" class="text-center">No returned books yet.</td></tr>';
+      } else {
+        returnedBooks.forEach(book => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${book.book_id}</td>
+            <td>${book.book_name}</td>
+            <td>${book.author}</td>
+            <td>${book.category}</td>
+            <td>
+              <button class="btn btn-danger btn-sm" onclick="deleteReturnedBook('${book.book_id}')">
+                <i class="fas fa-trash-alt"></i> Delete
+              </button>
+            </td>
+          `;
+          returnedBooksTableBody.appendChild(row);
+        });
+      }
+    }
+
+    // Render return requests (books returned but pending approval)
+    function renderReturnRequests() {
+      const approvalTableBody = document.getElementById('approvalTableBody');
+      const returnRequests = JSON.parse(localStorage.getItem('returnRequests')) || [];
+      approvalTableBody.innerHTML = '';
+
+      if (returnRequests.length === 0) {
+        approvalTableBody.innerHTML = '<tr><td colspan="5" class="text-center">No returned books pending approval.</td></tr>';
+      } else {
+        returnRequests.forEach(book => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${book.book_id}</td>
+            <td>${book.book_name}</td>
+            <td>${book.author}</td>
+            <td>${book.category}</td>
+            <td><button class="btn btn-approve" onclick="approveReturn('${book.book_id}')">Approve Return</button></td>
+          `;
+          approvalTableBody.appendChild(row);
+        });
+      }
+    }
+
+    // Approve a returned book
+    function approveReturn(bookId) {
+      let returnRequests = JSON.parse(localStorage.getItem('returnRequests')) || [];
+      let returnedBooks = JSON.parse(localStorage.getItem('returnedBooks')) || [];
+      let borrowedBooks = JSON.parse(localStorage.getItem('borrowedBooks')) || [];
+
+      const bookIndex = returnRequests.findIndex(book => book.book_id === bookId);
+      if (bookIndex !== -1) {
+        const approvedBook = returnRequests.splice(bookIndex, 1)[0];
+        returnedBooks.push(approvedBook);
+
+        // Remove the approved book from borrowedBooks
+        borrowedBooks = borrowedBooks.filter(book => book.book_id !== bookId);
+
+        localStorage.setItem('returnRequests', JSON.stringify(returnRequests));
+        localStorage.setItem('returnedBooks', JSON.stringify(returnedBooks));
+        localStorage.setItem('borrowedBooks', JSON.stringify(borrowedBooks));
+
+        // Refresh the tables
+        renderReturnRequests();
+        renderReturnedBooks();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      renderReturnRequests();
+      renderReturnedBooks();
+    });
+  </script>
+  <footer>
+    <div class="container text-center mt-5 mb-3">
+      <p>&copy; 2025 Library System. All Rights Reserved.</p>
+      <p style="font-style: italic; color: #4e73df;">
+        "A room without books is like a body without a soul." – Marcus Tullius Cicero
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Student Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            overflow-x: hidden;
+        }
+        header {
+            background: rgba(0, 87, 183, 0.85);
+            color: white;
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 8px 32px 0 rgb(103, 134, 18);
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 18px;
+            backdrop-filter: blur(8px);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+        }
+        header nav a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 28px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: color 0.3s, text-shadow 0.3s;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.12);
+        }
+        header nav a:hover {
+            color: #ffe082;
+            text-shadow: 0 4px 16px #fff176;
+        }
+        footer {
+            background: rgba(0, 87, 183, 0.85);
+            color: white;
+            text-align: center;
+            padding: 14px 0;
+            margin-top: 40px;
+            font-size: 15px;
+            box-shadow: 0 -8px 32px 0 rgba(31, 38, 135, 0.17);
+            border-top-left-radius: 18px;
+            border-top-right-radius: 18px;
+            backdrop-filter: blur(8px);
+        }
+        .container {
+            max-width: 950px;
+            margin: 50px auto 30px auto;
+            padding: 40px 35px 30px 35px;
+            background: rgba(255,255,255,0.18);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border-radius: 24px;
+            backdrop-filter: blur(12px);
+            border: 1.5px solid rgba(255,255,255,0.25);
+            position: relative;
+        }
+        h1 {
+            text-align: center;
+            color: #93c423;
+            font-weight: 800;
+            margin-bottom: 28px;
+            letter-spacing: 2px;
+            font-size: 2.2rem;
+            text-shadow: 0 2px 12px rgba(79,140,255,0.12);
+        }
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+        .form-group {
+            position: relative;
+            flex: 1 1 calc(50% - 12px);
+            min-width: 180px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 16px 12px 10px 12px;
+            font-size: 1rem;
+            border: 1.5px solid #bdbdbd;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.45);
+            color: #222;
+            outline: none;
+            transition: border 0.3s, box-shadow 0.3s;
+            font-family: inherit;
+        }
+        .form-group input:focus {
+            border: 2px solid #4f8cff;
+            box-shadow: 0 2px 12px #4f8cff33;
+        }
+        .form-group label {
+            position: absolute;
+            left: 14px;
+            top: 14px;
+            background: rgba(255,255,255,0.7);
+            padding: 0 6px;
+            color: #888;
+            font-size: 1rem;
+            pointer-events: none;
+            transition: 0.2s;
+            border-radius: 4px;
+        }
+        .form-group input:focus + label,
+        .form-group input:not(:placeholder-shown) + label {
+            top: -10px;
+            left: 10px;
+            font-size: 0.85rem;
+            color: #4f8cff;
+            background: #fff;
+        }
+        button#add-student {
+            flex: 1 1 100%;
+            padding: 16px 0;
+            font-size: 1.1rem;
+            background: linear-gradient(90deg, #4f8cff 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-top: 8px;
+            box-shadow: 0 4px 16px #4f8cff44;
+            transition: background 0.3s, transform 0.2s;
+        }
+        button#add-student:hover {
+            background: linear-gradient(90deg, #764ba2 0%, #4f8cff 100%);
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 8px 32px #764ba244;
+        }
+        .table-container {
+            margin-top: 38px;
+            background: rgba(255,255,255,0.22);
+            border-radius: 16px;
+            box-shadow: 0 4px 16px #4f8cff22;
+            padding: 18px 12px 8px 12px;
+        }
+        .table-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .table-header-row h2 {
+            margin: 0;
+            color: #4f8cff;
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .search-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .search-box input {
+            padding: 8px 36px 8px 14px;
+            border-radius: 8px;
+            border: 1.5px solid #bdbdbd;
+            font-size: 1rem;
+            outline: none;
+            background: rgba(255,255,255,0.7);
+            transition: border 0.3s;
+        }
+        .search-box input:focus {
+            border: 2px solid #4f8cff;
+        }
+        .search-box .search-icon {
+            position: absolute;
+            right: 10px;
+            color: #4f8cff;
+            font-size: 1.2rem;
+            pointer-events: none;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            background: rgba(255,255,255,0.85);
+        }
+        th, td {
+            padding: 15px 10px;
+            text-align: left;
+            border-bottom: 1px solid #e3e3e3;
+            font-size: 1rem;
+        }
+        th {
+            background: #4f8cff;
+            color: white;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        tr {
+            transition: background 0.2s;
+        }
+        tr:hover {
+            background: #e3f0ff;
+        }
+        td button {
+            padding: 8px 18px;
+            font-size: 15px;
+            background: linear-gradient(90deg, #ff5858 0%, #f09819 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 2px 8px #ff585822;
+            transition: background 0.3s, transform 0.2s;
+        }
+        td button:hover {
+            background: linear-gradient(90deg, #f09819 0%, #ff5858 100%);
+            transform: scale(1.07);
+            box-shadow: 0 4px 16px #f0981944;
+        }
+        @media (max-width: 700px) {
+            .container {
+                padding: 18px 4vw;
+            }
+            form {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .form-group {
+                min-width: 100%;
+            }
+            .table-container {
+                padding: 8px 2px 2px 2px;
+            }
+            th, td {
+                padding: 10px 4px;
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>Library Management System</h1>
+        <nav>
+            <a href="admin-dashboard.html">Admin Panel</a>
+            <a href="login.html">Logout</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1>Student Management System</h1>
+        <form id="student-form" autocomplete="off">
+            <div class="form-group">
+                <input type="text" id="usn" placeholder=" " required>
+                <label for="usn">Enter USN</label>
+            </div>
+            <div class="form-group">
+                <input type="text" id="name" placeholder=" " required>
+                <label for="name">Enter Name</label>
+            </div>
+            <div class="form-group">
+                <input type="number" id="age" placeholder=" " required>
+                <label for="age">Enter Age</label>
+            </div>
+            <div class="form-group">
+                <input type="text" id="branch" placeholder=" " required>
+                <label for="branch">Enter Branch</label>
+            </div>
+            <button type="button" id="add-student">Add Student</button>
+        </form>
+
+        <div class="table-container">
+            <div class="table-header-row">
+                <h2>Student List</h2>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search students...">
+                    <span class="search-icon">&#128269;</span>
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>USN</th>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Branch</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="student-table-body">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        &copy; 2025 Library Management System. All Rights Reserved.
+    </footer>
+
+    <script>
+        // Fetch and render students
+        let studentsData = [];
+        function renderStudents(filter = "") {
+            const tableBody = document.getElementById('student-table-body');
+            tableBody.innerHTML = "";
+            let filtered = studentsData;
+            if (filter.trim() !== "") {
+                const f = filter.trim().toLowerCase();
+                filtered = studentsData.filter(s =>
+                    s.usn.toLowerCase().includes(f) ||
+                    s.name.toLowerCase().includes(f) ||
+                    s.branch.toLowerCase().includes(f) ||
+                    String(s.age).includes(f)
+                );
+            }
+            if (filtered.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:#888;">No students found.</td></tr>`;
+                return;
+            }
+            filtered.forEach(student => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${student.usn}</td>
+                    <td>${student.name}</td>
+                    <td>${student.age}</td>
+                    <td>${student.branch}</td>
+                    <td>
+                        <button onclick="removeStudent('${student.usn}')">Remove</button>
+                        <button class="modify-btn" data-usn="${student.usn}">Modify</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Initial fetch
+        window.onload = function() {
+            fetch('http://127.0.0.1:5000/students')
+                .then(response => response.json())
+                .then(data => {
+                    studentsData = data;
+                    renderStudents();
+                });
+        };
+
+        // Add a new student or update existing
+        let isEditing = false;
+        let editingUSN = null;
+
+        document.getElementById('add-student').addEventListener('click', function() {
+            const usn = document.getElementById('usn').value;
+            const name = document.getElementById('name').value;
+            const age = document.getElementById('age').value;
+            const branch = document.getElementById('branch').value;
+
+            if (!isEditing) {
+                // Add student
+                fetch('http://127.0.0.1:5000/students', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ usn, name, age, branch })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        location.reload();
+                    } else {
+                        alert(data.message);
+                    }
+                });
+            } else {
+                // Update student
+                fetch('http://127.0.0.1:5000/students', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        action: 'update',
+                        book_id: null, // not used for students
+                        book_name: null,
+                        author: null,
+                        category: null,
+                        description: null,
+                        usn: editingUSN,
+                        name,
+                        age,
+                        branch
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Student updated successfully');
+                        location.reload();
+                    } else {
+                        alert(data.message || 'Failed to update student');
+                    }
+                });
+            }
+        });
+
+        // Remove a student
+        function removeStudent(usn) {
+            fetch('http://127.0.0.1:5000/students', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ usn })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    location.reload();
+                } else {
+                    alert(data.message);
+                }
+            });
+        }
+
+        // Modify student
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modify-btn')) {
+                const usn = event.target.getAttribute('data-usn');
+                const student = studentsData.find(s => s.usn === usn);
+                if (student) {
+                    document.getElementById('usn').value = student.usn;
+                    document.getElementById('name').value = student.name;
+                    document.getElementById('age').value = student.age;
+                    document.getElementById('branch').value = student.branch;
+                    document.getElementById('usn').readOnly = true;
+                    isEditing = true;
+                    editingUSN = student.usn;
+                    document.getElementById('add-student').textContent = 'Update Student';
+                }
+            }
+        });
+
+        // Reset form after update or add
+        function resetForm() {
+            document.getElementById('student-form').reset();
+            document.getElementById('usn').readOnly = false;
+            isEditing = false;
+            editingUSN = null;
+            document.getElementById('add-student').textContent = 'Add Student';
+        }
+
+        // Optionally, reset form when user clicks outside or after reload
+        document.getElementById('student-form').addEventListener('reset', resetForm);
+
+        // Search/filter feature
+        document.getElementById('searchInput').addEventListener('input', function() {
+            renderStudents(this.value);
+        });
+
+        // Floating label fix for autofill
+        document.querySelectorAll('.form-group input').forEach(input => {
+            input.addEventListener('input', function() {
+                if (this.value !== "") {
+                    this.classList.add('filled');
+                } else {
+                    this.classList.remove('filled');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

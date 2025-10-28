@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+    <style>
+        /* Import a modern Google font */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background: linear-gradient(to bottom, #e0f7fa, #ffffff);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(90deg, #00c6ff, #0072ff);
+            color: white;
+            padding: 15px 30px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .left {
+            display: flex;
+            align-items: center;
+        }
+
+        .left h1 {
+            margin: 0;
+            font-size: 30px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin: 0 20px;
+            font-weight: 600;
+            font-size: 16px;
+            position: relative;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .nav-links a::after {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            background-color: #ffeb3b;
+            transition: width 0.3s ease, left 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+            left: 0;
+        }
+
+        .nav-links a:hover {
+            color: #ffd740;
+            transform: scale(1.1);
+        }
+
+        .right {
+            display: flex;
+            align-items: center;
+        }
+
+        .right a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: color 0.3s, transform 0.3s;
+            position: relative;
+        }
+
+        .right a:hover {
+            color: #ffd740;
+            transform: scale(1.1);
+        }
+
+        .background {
+            flex: 1;
+            background-image: url('https://img.pikbest.com/wp/202348/depicting-a-symbol-of-achievement-graduation-cap-resting-on-stack-books-representing-education-and-learning-in-the-context-schools-universities-depicted-as-3d-illustration_9781348.jpg!f305cw');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 350px;
+            border-bottom: 8px solid #00c6ff;
+        }
+
+        .welcome {
+            text-align: center;
+            padding: 40px 20px;
+            background: #263238;
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            line-height: 1.6;
+            box-shadow: inset 0 0 20px #00000066;
+        }
+
+        .welcome h2 {
+            font-size: 30px;
+            color: #64ffda;
+            margin-bottom: 15px;
+            animation: fadeInDown 1s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: linear-gradient(90deg, #0072ff, #00c6ff);
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            box-shadow: 0px -4px 12px rgba(0, 0, 0, 0.2);
+            margin-top: auto;
+        }
+
+        footer:hover {
+            background: linear-gradient(90deg, #00c6ff, #0072ff);
+            color: #ffe57f;
+        }
+
+        .footer-left, .footer-right {
+            flex: 1;
+            text-align: center;
+        }
+
+        .footer-center {
+            flex: 2;
+            text-align: center;
+            font-style: italic;
+            font-size: 15px;
+            padding: 0 10px;
+        }
+
+        .footer-left a, .footer-right a {
+            text-decoration: none;
+            color: white;
+            font-weight: 700;
+            position: relative;
+            transition: color 0.3s, text-shadow 0.3s, transform 0.3s;
+        }
+
+        .footer-left a::after, .footer-right a::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: -5px;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(to right, #ffd740, #ff9100);
+            transition: width 0.3s ease, left 0.3s ease;
+        }
+
+        .footer-left a:hover::after, .footer-right a:hover::after {
+            width: 100%;
+            left: 0;
+        }
+
+        .footer-left a:hover, .footer-right a:hover {
+            color: #ffe57f;
+            transform: scale(1.1);
+            text-shadow: 0 0 8px #ffd740;
+            animation: bounce 0.4s ease;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="left">
+        <h1>📖 LIBRARY MANAGEMENT SYSTEM</h1>
+        <div class="nav-links">
+            <a href="student.html"> DASHBOARD</a>
+            <a href="books.html">BOOKS</a>
+            <a href="login.html">LOGIN</a>
+        </div>
+    </div>
+    <div class="right">
+        <a href="aboutus.html">ABOUT US</a>
+        <a href="contact.html">CONTACT US</a>
+    </div>
+</header>
+
+<div class="background"></div>
+
+<section class="welcome">
+    <h2>Welcome to Our Library!</h2>
+    <p>📚 "A library is not just a collection of books; it is a gateway to knowledge, imagination, and endless possibilities.
+        Here, you can explore a world of information, enrich your mind, and embark on a journey of lifelong learning.
+        Whether you are a student, a researcher, or an avid reader, our library is your trusted companion in the pursuit of wisdom and discovery."</p>
+</section>
+
+<footer>
+    <div class="footer-left">
+        <a href="faq.html">FAQ</a>
+    </div>
+    <div class="footer-center">
+        <p>“Once you learn to read, you will be forever free.” – Frederick Douglass</p>
+    </div>
+    <div class="footer-right">
+        <a href="feedback.html">📝GIVE FEEDBACK</a>
+    </div>
+</footer>
+
+<!-- Modern Popup Modal -->
+<div class="modal-overlay" id="popupModal" style="display:none;position:fixed;z-index:2000;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.4);justify-content:center;align-items:center;">
+  <div class="modal" id="popupModalBox" style="background:#222;color:#fff;border-radius:16px;padding:32px 24px 24px 24px;max-width:350px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.25);text-align:center;animation:fadeInModal 0.3s;">
+    <div id="popupModalMsg" style="margin-bottom:18px;font-size:1.1em;"></div>
+    <button id="popupModalYes" style="margin:0 10px 0 0;padding:10px 28px;border:none;border-radius:24px;background:linear-gradient(45deg,#45f3ff,#0072ff);color:#222;font-weight:bold;font-size:1em;cursor:pointer;transition:background 0.2s;">Yes</button>
+    <button id="popupModalNo" style="padding:10px 28px;border:none;border-radius:24px;background:linear-gradient(45deg,#ff2770,#ff9800);color:#fff;font-weight:bold;font-size:1em;cursor:pointer;transition:background 0.2s;">No</button>
+  </div>
+</div>
+<style>
+@keyframes fadeInModal {
+  from { opacity: 0; transform: translateY(-30px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+</style>
+
+<script>
+    // Modern popup logic for login prompt
+    function showLoginPopup(message, onYes, onNo) {
+        const overlay = document.getElementById('popupModal');
+        const msg = document.getElementById('popupModalMsg');
+        const yesBtn = document.getElementById('popupModalYes');
+        const noBtn = document.getElementById('popupModalNo');
+        msg.textContent = message;
+        overlay.style.display = 'flex';
+        yesBtn.onclick = function() {
+            overlay.style.display = 'none';
+            if (onYes) onYes();
+        };
+        noBtn.onclick = function() {
+            overlay.style.display = 'none';
+            if (onNo) onNo();
+        };
+    }
+
+    // Select all links inside the page
+    const links = document.querySelectorAll('a');
+    links.forEach(link => {
+        link.addEventListener('click', function(event) {
+            event.preventDefault();
+            showLoginPopup("You must login to access this page. Proceed to Login?", function() {
+                window.location.href = 'loginstudent.html';
+            }, function() {
+                // Do nothing, stay on page
+            });
+        });
+    });
+</script>
+
+<script src="mainstu.js"></script>
+
+</body>
+</html>

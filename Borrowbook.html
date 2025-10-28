@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Borrowed Books</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f7fa;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 50px 20px;
+      color: #2c3e50;
+    }
+    .container {
+      max-width: 1200px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      padding: 40px 50px;
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      height: 100vh;
+      overflow-y: auto;
+      box-sizing: border-box;
+    }
+    h1 {
+      text-align: center;
+      font-weight: 700;
+      color: #34495e;
+      margin-bottom: 40px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+    #borrowedBooksContainer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 24px;
+      padding: 10px 0;
+    }
+    .book-card {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      padding: 20px 18px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 280px;
+      border: 1px solid #d1d5db;
+    }
+    .book-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 10px 30px rgba(41, 128, 185, 0.3);
+      background: #e3f2fd;
+      border-color: #2196f3;
+    }
+    .book-card p {
+      margin: 10px 0;
+      font-size: 15px;
+      color: #374151;
+    }
+    .book-card p strong {
+      color: #2563eb;
+      font-weight: 700;
+    }
+    .return-btn {
+      margin-top: 20px;
+      padding: 12px 0;
+      background-color: #2980b9;
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-weight: 700;
+      font-size: 17px;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(41, 128, 185, 0.6);
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      width: 100%;
+      text-align: center;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .return-btn:hover {
+      background-color: #1c5980;
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(28, 89, 128, 0.8);
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-5">
+    <h1 class="text-center mb-4">📚 Borrowed Books</h1>
+    <div id="borrowedBooksContainer" class="row"></div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const borrowedBooksContainer = document.getElementById('borrowedBooksContainer');
+
+      // Function to render books
+      function renderBooks() {
+        const borrowedBooks = JSON.parse(localStorage.getItem('borrowedBooks')) || [];
+        borrowedBooksContainer.innerHTML = ''; // Clear the container
+
+        if (borrowedBooks.length === 0) {
+          borrowedBooksContainer.innerHTML = '<p class="text-center">No books borrowed yet.</p>';
+          return;
+        }
+
+        borrowedBooks.forEach(book => {
+          const bookCard = `
+            <div class="col-md-4">
+              <div class="book-card">
+                <p><strong>Book ID:</strong> ${book.book_id}</p>
+                <p><strong>Book Name:</strong> ${book.book_name}</p>
+                <p><strong>Author:</strong> ${book.author}</p>
+                <p><strong>Category:</strong> ${book.category}</p>
+              </div>
+              <button class="return-btn btn btn-danger mt-2" data-book='${JSON.stringify(book)}'>Return</button>
+            </div>
+          `;
+          borrowedBooksContainer.innerHTML += bookCard;
+        });
+      }
+
+      // Initial render
+      renderBooks();
+
+      // Set interval to refresh borrowed books and returned books every 30 seconds
+      setInterval(() => {
+        renderBooks();
+        renderReturnedBooks();
+      }, 30000);
+
+    // Add event listener for return buttons
+    document.addEventListener('click', function(event) {
+      if (event.target.classList.contains('return-btn')) {
+        const book = JSON.parse(event.target.getAttribute('data-book'));
+        // Show popup confirmation
+        if (confirm(`Are you sure you want to return the book "${book.book_name}"?`)) {
+          // Add book to returnRequests in localStorage
+          let returnRequests = JSON.parse(localStorage.getItem('returnRequests')) || [];
+          returnRequests.push(book);
+          localStorage.setItem('returnRequests', JSON.stringify(returnRequests));
+          // Send return request to backend
+          fetch('/return-book', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              book_id: book.book_id,
+              user_id: 1  // TODO: Replace with actual logged-in user ID
+            })
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              alert('Return request sent. You can approve it in the Issue/Return Approval page.');
+            } else {
+              alert('Failed to send return request: ' + data.message);
+            }
+          })
+          .catch(error => {
+            alert('Error sending return request: ' + error);
+          });
+        }
+      }
+    });
+
+    // Add event listener for borrow buttons (assuming you have borrow buttons)
+    document.addEventListener('click', function(event) {
+      if (event.target.classList.contains('borrow-btn')) {
+        const book = JSON.parse(event.target.getAttribute('data-book'));
+        // Show popup confirmation
+        if (confirm(`Are you sure you want to borrow the book "${book.book_name}"?`)) {
+          // Add book to borrowedBooks in localStorage
+          let borrowedBooks = JSON.parse(localStorage.getItem('borrowedBooks')) || [];
+          borrowedBooks.push(book);
+          localStorage.setItem('borrowedBooks', JSON.stringify(borrowedBooks));
+          // Send borrow request to backend
+          fetch('/borrow-book', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              book_id: book.book_id,
+              user_id: 1  // TODO: Replace with actual logged-in user ID
+            })
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              alert('Book borrowed successfully.');
+              renderBooks(); // Refresh the list
+            } else {
+              alert('Failed to borrow book: ' + data.message);
+            }
+          })
+          .catch(error => {
+            alert('Error borrowing book: ' + error);
+          });
+        }
+      }
+    });
+
+      // Render returned books section
+      function renderReturnedBooks() {
+        const returnedBooksContainer = document.getElementById('returnedBooksContainer');
+        if (!returnedBooksContainer) return;
+        const returnedBooks = JSON.parse(localStorage.getItem('returnedBooks')) || [];
+        returnedBooksContainer.innerHTML = '';
+
+        if (returnedBooks.length === 0) {
+          returnedBooksContainer.innerHTML = '<p class="text-center">No books returned yet.</p>';
+          return;
+        }
+
+        returnedBooks.forEach(book => {
+          const bookCard = `
+            <div class="col-md-4">
+              <div class="book-card">
+                <p><strong>Book ID:</strong> ${book.book_id}</p>
+                <p><strong>Book Name:</strong> ${book.book_name}</p>
+                <p><strong>Author:</strong> ${book.author}</p>
+                <p><strong>Category:</strong> ${book.category}</p>
+              </div>
+            </div>
+          `;
+          returnedBooksContainer.innerHTML += bookCard;
+        });
+      }
+
+      // Add event listener for approve return buttons
+      document.addEventListener('click', function(event) {
+        if (event.target.classList.contains('approve-return-btn')) {
+          const bookId = event.target.getAttribute('data-book-id');
+          let returnedBooks = JSON.parse(localStorage.getItem('returnedBooks')) || [];
+          let borrowedBooks = JSON.parse(localStorage.getItem('borrowedBooks')) || [];
+
+          // Remove book from borrowedBooks
+          borrowedBooks = borrowedBooks.filter(book => book.book_id !== bookId);
+          localStorage.setItem('borrowedBooks', JSON.stringify(borrowedBooks));
+
+          // Remove book from returnedBooks
+          returnedBooks = returnedBooks.filter(book => book.book_id !== bookId);
+          localStorage.setItem('returnedBooks', JSON.stringify(returnedBooks));
+
+          // Optionally, add to another list or just remove from returnedBooks on approval
+
+          // Re-render returned books and borrowed books
+          renderReturnedBooks();
+          renderBooks();
+        }
+      });
+
+      // Create returned books section container
+      const container = document.querySelector('.container');
+      const returnedSection = document.createElement('div');
+      returnedSection.className = 'mt-5';
+      returnedSection.innerHTML = '<h2 class="text-center mb-4">✅ Returned Books</h2><div id="returnedBooksContainer" class="row"></div>';
+      container.appendChild(returnedSection);
+
+      // Initial render of returned books
+      renderReturnedBooks();
+    });
+  </script>
+</body>
+</html>

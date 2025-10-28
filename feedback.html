@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Feedback - Library Management System</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: url('https://img.freepik.com/premium-photo/scene-showing-dpa-being-stored-securely-companys-legal-document-management-system_1314467-63883.jpg') no-repeat center center/cover;
+      background-attachment: fixed;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    header {
+      background-color: rgba(135, 206, 250, 0.9);
+      padding: 15px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      width: 100%;
+    }
+    .container {
+      max-width: 500px;
+      padding: 25px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 30px #c5eb04;
+      border-radius: 15px;
+      text-align: center;
+      animation: fadeIn 0.8s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h2 {
+      color: white;
+      font-size: 28px;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    }
+    p {
+      color: white;
+      font-size: 16px;
+    }
+    .feedback-form input, .feedback-form textarea, .feedback-form select {
+      width: 90%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      outline: none;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      box-shadow: inset 2px 2px 5px rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+    .feedback-form input::placeholder,
+    .feedback-form textarea::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    .feedback-form input:focus, .feedback-form textarea:focus, .feedback-form select:focus {
+      background: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      transform: scale(1.05);
+    }
+    .feedback-form button {
+      padding: 12px 20px;
+      background: linear-gradient(to right, #ff416c, #ff4b2b);
+      border: none;
+      font-size: 18px;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      border-radius: 30px;
+      box-shadow: 0 0 10px rgba(255, 69, 0, 0.7);
+      transition: all 0.3s ease;
+    }
+    .feedback-form button:hover {
+      background: white;
+      color: #ff4b2b;
+      box-shadow: 0 0 15px rgba(255, 69, 0, 1);
+      transform: scale(1.1);
+    }
+    .feedback-form button:active {
+      transform: scale(0.95);
+    }
+    footer {
+      text-align: center;
+      padding: 10px;
+      font-size: 14px;
+      color: white;
+      margin-top: 20px;
+    }
+    /* Success Modal Styles */
+    #successModal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+    }
+    #successModal .modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      animation: fadeInScale 0.4s ease-in-out;
+    }
+    #successModal h2 {
+      color: #4CAF50;
+    }
+    #successModal p {
+      color: #333;
+    }
+    #successModal button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    #successModal button:hover {
+      background: #45a049;
+    }
+    @keyframes fadeInScale {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <header>📝 Feedback - Library Management System</header>
+
+  <div class="container">
+    <h2>We Value Your Feedback!</h2>
+    <p>Help us improve our services by sharing your thoughts.</p>
+
+    <form class="feedback-form" onsubmit="return false;">
+      <input type="text" placeholder="Your Name" name="name" required />
+      <input type="email" placeholder="Your Email" name="email" required />
+
+      <select name="feedbackBy" required onchange="toggleExtraFields()">
+        <option value="" disabled selected>Feedback By</option>
+        <option value="student">Student</option>
+        <option value="admin">Admin</option>
+      </select>
+
+      <div id="studentFields" style="display: none;">
+        <input type="text" placeholder="USN" name="usn" />
+        <input type="text" placeholder="Branch" name="branch" />
+      </div>
+
+      <div id="adminField" style="display: none;">
+        <input type="text" placeholder="Admin ID" name="admin-id" />
+      </div>
+
+      <select name="feedback-type">
+        <option value="" disabled selected>Select Feedback Type</option>
+        <option value="general">General Feedback</option>
+        <option value="issue">Report an Issue</option>
+        <option value="suggestion">Suggest an Improvement</option>
+        <option value="other">Other</option>
+      </select>
+
+      <textarea placeholder="Your Message" rows="5" name="message" required></textarea>
+      <button type="submit">Submit Feedback</button>
+    </form>
+  </div>
+
+  <footer>📚 Library Management System © 2025</footer>
+
+  <!-- ✅ Success Popup Modal -->
+  <div id="successModal">
+    <div class="modal-content">
+      <h2>✅ Feedback Submitted!</h2>
+      <p>Thank you for your valuable feedback.</p>
+      <button onclick="closeModal()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    function toggleExtraFields() {
+      const feedbackBy = document.querySelector('select[name="feedbackBy"]').value;
+      document.getElementById("studentFields").style.display = feedbackBy === "student" ? "block" : "none";
+      document.getElementById("adminField").style.display = feedbackBy === "admin" ? "block" : "none";
+    }
+
+    function showSuccessModal() {
+      document.getElementById("successModal").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("successModal").style.display = "none";
+      // Refresh the page after closing the modal
+      window.location.reload();
+    }
+
+    document.querySelector('form').onsubmit = function(event) {
+      event.preventDefault();
+
+      const feedbackData = {
+        name: document.querySelector('input[name="name"]').value,
+        email: document.querySelector('input[name="email"]').value,
+        role: document.querySelector('select[name="feedbackBy"]').value,
+        feedback_type: document.querySelector('select[name="feedback-type"]').value,
+        message: document.querySelector('textarea[name="message"]').value,
+      };
+
+      if (feedbackData.role === 'student') {
+        feedbackData.usn = document.querySelector('input[name="usn"]').value;
+        feedbackData.branch = document.querySelector('input[name="branch"]').value;
+      } else if (feedbackData.role === 'admin') {
+        feedbackData.admin_id = document.querySelector('input[name="admin-id"]').value;
+      }
+      fetch('http://127.0.0.1:5000/submit-feedback', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(feedbackData)
+})
+
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          showSuccessModal();
+        } else {
+          alert('Failed to submit feedback.');
+        }
+      })
+      .catch(error => {
+        console.error('Error submitting feedback:', error);
+      });
+    };
+  </script>
+</body>
+</html>

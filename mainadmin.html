@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - Library Management System</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background: linear-gradient(to bottom right, #e0f7fa, #ffffff);
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      color: white;
+      padding: 20px 30px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+    }
+    .left {
+      display: flex;
+      align-items: center;
+    }
+    .left h1 {
+      margin: 0;
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .nav-links {
+      margin-left: 30px;
+      display: flex;
+      gap: 20px;
+    }
+    .nav-links a {
+      color: white;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 8px 15px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+    }
+    .nav-links a:hover {
+      background: rgba(255, 255, 255, 0.25);
+      color: #ffeb3b;
+      transform: translateY(-2px) scale(1.05);
+    }
+    .right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .right a {
+      color: white;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 8px 15px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+    }
+    .right a:hover {
+      background: rgba(255, 255, 255, 0.25);
+      color: #ffeb3b;
+      transform: translateY(-2px) scale(1.05);
+    }
+    .background {
+      flex: 1;
+      background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
+                  url('https://t4.ftcdn.net/jpg/11/30/71/25/360_F_1130712561_0BZGSGHTFa3iMLv1eVHQQlGZCP8jxq14.jpg') center/cover no-repeat;
+      height: 300px;
+      border-radius: 20px;
+      margin: 20px;
+      box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
+      animation: zoomIn 2s ease;
+    }
+    @keyframes zoomIn {
+      from {
+        transform: scale(0.95);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    .welcome {
+      text-align: center;
+      padding: 40px 20px;
+      margin: 20px;
+      background: rgba(31, 45, 61, 0.85);
+      color: white;
+      font-size: 18px;
+      font-weight: 600;
+      border-radius: 20px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      animation: fadeIn 2s ease;
+    }
+    .welcome h2 {
+      font-size: 28px;
+      color: #00ffcc;
+      margin-bottom: 20px;
+      font-weight: 800;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      color: white;
+      font-weight: bold;
+      box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.2);
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      margin-top: auto;
+    }
+    .footer-left, .footer-center, .footer-right {
+      flex: 1;
+      text-align: center;
+    }
+    .footer-left a, .footer-right a {
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .footer-left a::after, .footer-right a::after {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 2px;
+      background: #ffeb3b;
+      left: 50%;
+      bottom: -5px;
+      transition: width 0.3s ease, left 0.3s ease;
+    }
+    .footer-left a:hover::after, .footer-right a:hover::after {
+      width: 100%;
+      left: 0;
+    }
+    .footer-left a:hover, .footer-right a:hover {
+      color: #ffeb3b;
+      transform: scale(1.1);
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header>
+  <div class="left">
+    <h1>🛡️ ADMIN PANEL DASHBOARD</h1>
+    <div class="nav-links">
+     
+      <a href="manage_books.html">BOOKS</a>
+      <a href="manage_students.html">STUDENTS</a>
+      <a href="issue_return.html">ISSUE/RETURN</a>
+      <a href="reports.html">REVIEWS</a>
+      <a href="login.html">LOGIN</a>
+    </div>
+  </div>
+  <div class="right">
+    <a href="aboutus.html">ABOUTUS</a>
+    
+    <a href="contactus.html">CONTACTUS</a>
+  </div>
+</header>
+
+<!-- Background Section -->
+<div class="background"></div>
+
+<!-- Welcome Section -->
+<section class="welcome">
+  <h2>Welcome, Administrator!</h2>
+  <p>🛡️ "As the guardian of knowledge, your role is vital in maintaining the integrity and growth of our library. 
+  Here, you can manage books, students, track records, and ensure a smooth journey for every reader. 
+  Empower learning. Empower dreams. Welcome to the control room of limitless possibilities!"</p>
+</section>
+
+<footer>
+  <div class="footer-left">
+    <a href="admin_faq.html">ADMIN FAQ</a>
+  </div>
+  <div class="footer-center">
+    <p>“Management is doing things right; leadership is doing the right things.” – Peter Drucker</p>
+  </div>
+  <div class="footer-right">
+    <a href="admin_feedback.html">📝 ADMIN FEEDBACK</a>
+  </div>
+</footer>
+
+<!-- Modern Popup Modal -->
+<div class="modal-overlay" id="popupModal" style="display:none;position:fixed;z-index:2000;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.4);justify-content:center;align-items:center;">
+  <div class="modal" id="popupModalBox" style="background:#222;color:#fff;border-radius:16px;padding:32px 24px 24px 24px;max-width:350px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.25);text-align:center;animation:fadeInModal 0.3s;">
+    <div id="popupModalMsg" style="margin-bottom:18px;font-size:1.1em;"></div>
+    <button id="popupModalYes" style="margin:0 10px 0 0;padding:10px 28px;border:none;border-radius:24px;background:linear-gradient(45deg,#45f3ff,#0072ff);color:#222;font-weight:bold;font-size:1em;cursor:pointer;transition:background 0.2s;">Yes</button>
+    <button id="popupModalNo" style="padding:10px 28px;border:none;border-radius:24px;background:linear-gradient(45deg,#ff2770,#ff9800);color:#fff;font-weight:bold;font-size:1em;cursor:pointer;transition:background 0.2s;">No</button>
+  </div>
+</div>
+<style>
+@keyframes fadeInModal {
+  from { opacity: 0; transform: translateY(-30px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+</style>
+<script>
+  // Modern popup logic for login prompt
+  function showLoginPopup(message, onYes, onNo) {
+    const overlay = document.getElementById('popupModal');
+    const msg = document.getElementById('popupModalMsg');
+    const yesBtn = document.getElementById('popupModalYes');
+    const noBtn = document.getElementById('popupModalNo');
+    msg.textContent = message;
+    overlay.style.display = 'flex';
+    yesBtn.onclick = function() {
+      overlay.style.display = 'none';
+      if (onYes) onYes();
+    };
+    noBtn.onclick = function() {
+      overlay.style.display = 'none';
+      if (onNo) onNo();
+    };
+  }
+
+  // Select all links inside the page
+  const links = document.querySelectorAll('a');
+  links.forEach(link => {
+    link.addEventListener('click', function(event) {
+      event.preventDefault();
+      showLoginPopup("You must login to access this page. Proceed to Login?", function() {
+        window.location.href = 'loginadmin.html';
+      }, function() {
+        // Do nothing, stay on page
+      });
+    });
+  });
+</script>
+
+</body>
+</html>

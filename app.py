@@ -17,7 +17,7 @@ def get_db_connection():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="yogesh@25112003",
+        password="your database password",
         database="library_db"
     )
     print("Database connection successful!")
@@ -635,3 +635,4 @@ def method_not_allowed(e):
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
+

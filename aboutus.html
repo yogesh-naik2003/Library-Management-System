@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Library Management System</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKjlroEhmoGIxrxV1rEl6EIEWFTA-QciB6a4l4irM9LbT1OhAxfNJSqboebmyCKbmtOIM&usqp=CAU') no-repeat center center/cover;
+            color: #333;
+        }
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: rgba(30, 144, 255, 0.85);
+            padding: 20px;
+            font-size: 26px;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        /* Unique Back Button */
+        .back-button {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            color: white;
+            border: 2px solid rgb(229, 233, 12);
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        .back-button:hover {
+            background: white;
+            color: #1e90ff;
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.6);
+        }
+        .back-button:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+        /* Glassmorphism Effect for Content */
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.6);
+            border-left: 5px solid #1e90ff;
+            border-radius: 8px;
+            transition: transform 0.3s;
+        }
+        .section:hover {
+            transform: scale(1.02);
+        }
+        .section h3 {
+            color: #1e90ff;
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+        .section p {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #222;
+        }
+        .features {
+            list-style: none;
+            padding: 0;
+        }
+        .features li {
+            font-size: 18px;
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+        }
+        .features li::before {
+            content: "✔";
+            color: #1e90ff;
+            font-size: 20px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        footer {
+            text-align: center;
+            padding: 15px;
+            background: rgba(30, 144, 255, 0.85);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        
+        📖 About Us - Library Management System
+    </header>
+
+    <div class="container">
+        <div class="section">
+            <h3>📚 Introduction</h3>
+            <p>Welcome to the Library Management System, a digital platform designed to streamline book lending, tracking, and overall library operations. Whether you're a student, researcher, or librarian, our system makes managing library resources effortless and efficient.</p>
+        </div>
+
+        <div class="section">
+            <h3>🎯 Our Mission</h3>
+            <p>Our mission is to enhance knowledge accessibility by providing a user-friendly platform that simplifies book borrowing, management, and organization. We believe in the power of technology to improve learning experiences and ensure a well-maintained library environment.</p>
+        </div>
+
+        <div class="section">
+            <h3>🚀 Key Features</h3>
+            <ul class="features">
+                <li>Online Book Catalog – Browse and search books effortlessly</li>
+                <li>User Accounts – Secure login for students and librarians</li>
+                <li>Automated Book Issuing & Returns – Track due dates and avoid penalties</li>
+                <li>Digital Resources – Access e-books and research papers</li>
+                <li>Admin Dashboard – Manage books, users, and reports efficiently</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h3>📖 Importance of Library Management</h3>
+            <p>A library management system is essential for organizing and maintaining a structured library environment. It helps in:</p>
+            <ul class="features">
+                <li>Keeping track of issued and returned books.</li>
+                <li>Reducing paperwork and manual errors.</li>
+                <li>Providing easy access to library resources.</li>
+                <li>Enhancing the learning experience with digital integration.</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h3>💡 Benefits of Our System</h3>
+            <p>Our Library Management System provides numerous advantages, such as:</p>
+            <ul class="features">
+                <li>Time-efficient book management process.</li>
+                <li>Reduced operational costs for the library.</li>
+                <li>Easy tracking of lost or overdue books.</li>
+                <li>Data security and role-based access for librarians and students.</li>
+            </ul>
+        </div>
+    </div>
+
+    <footer>📚 Library Management System © 2025</footer>
+
+</body>
+</html>
